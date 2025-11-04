@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sapa_mobile/routes/app_routes.dart';
+import 'package:sapa_mobile/widget/circle_icon_button.dart';
 import 'package:sapa_mobile/widget/scaffold/main_scaffold.dart';
 import '../modules/journal/journal_page.dart';
 import '../modules/people/people_page.dart';
@@ -12,23 +13,32 @@ class AppPages {
   static final pages = <GetPage>[
     GetPage(
       name: Routes.journal,
-      page: () => const MainScaffold(body: JournalPage(), title: 'Jurnal'),
-      binding: BindingsBuilder(() {
-        // pastikan hanya sekali diinisiasi di main.dart (lihat bawah)
-      }),
+      page: () => const MainScaffold(title: 'Jurnal', body: JournalPage()),
     ),
     GetPage(
       name: Routes.people,
-      page: () => const MainScaffold(body: PeoplePage(), title: 'Orang'),
+      page:
+          () => MainScaffold(
+            title: 'Orang',
+            action: CircleIconButton(
+              asset: 'assets/icon/plus.svg',
+              size: 36, // samakan dengan desain
+              iconSize: 24,
+              tone: CircleTone.primary, // atau primary
+              tooltip: 'Tambah orang',
+              onTap: () {
+                // TODO: navigasi ke form tambah orang
+              },
+            ),
+            body: PeoplePage(),
+          ),
     ),
     GetPage(
       name: Routes.reminder,
-      page: () => const MainScaffold(body: ReminderPage(), title: 'Reminder'),
+      page: () => MainScaffold(title: 'Reminder', body: const ReminderPage()),
     ),
-
     // Halaman tanpa navbar
-    GetPage(name: Routes.compose,  page: () => const ComposePage()),
+    GetPage(name: Routes.compose, page: () => const ComposePage()),
     GetPage(name: Routes.settings, page: () => const SettingPage()),
   ];
-  
 }

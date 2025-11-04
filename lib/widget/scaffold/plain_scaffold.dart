@@ -1,12 +1,11 @@
-// layout/nav_scaffold.dart
+// layout/plain_scaffold.dart
 import 'package:flutter/material.dart';
 import 'package:sapa_mobile/widget/bg_bubbles.dart';
 import 'package:sapa_mobile/widget/header_bar.dart';
-import 'package:sapa_mobile/widget/navbar.dart';
 
 
-class MainScaffold extends StatelessWidget {
-  const MainScaffold({
+class PlainScaffold extends StatelessWidget {
+  const PlainScaffold({
     super.key,
     required this.body,
     this.title,
@@ -32,7 +31,6 @@ class MainScaffold extends StatelessWidget {
           )),
         ]),
       ]),
-      bottomNavigationBar: const Navbar(),
     );
   }
 }
