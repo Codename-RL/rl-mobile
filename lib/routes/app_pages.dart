@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sapa_mobile/modules/people/person_detail_page.dart';
 import 'package:sapa_mobile/routes/app_routes.dart';
-import 'package:sapa_mobile/widget/action_button.dart';
-import 'package:sapa_mobile/widget/circle_icon_button.dart';
+import 'package:sapa_mobile/widget/button/action_button.dart';
+import 'package:sapa_mobile/widget/button/circle_icon_button.dart';
 import 'package:sapa_mobile/widget/scaffold/form_scaffold.dart';
 import 'package:sapa_mobile/widget/scaffold/main_scaffold.dart';
+import 'package:sapa_mobile/widget/scaffold/profile_scaffold.dart';
 import '../modules/journal/journal_page.dart';
 import '../modules/people/people_page.dart';
 import '../modules/compose/compose_page.dart';
@@ -68,5 +70,28 @@ class AppPages {
     ),
     // GetPage(name: Routes.compose, page: () => const ComposePage()),
     GetPage(name: Routes.settings, page: () => const SettingPage()),
+
+
+    GetPage(
+  name: Routes.personDetail,
+  transition: Transition.cupertino,
+  page: () {
+    final id = Get.parameters['id']!;        // ambil dari URL
+    // (opsional) ambil data orang by id dari service/controller di sini
+
+    return ProfileScaffold(
+      label: 'Teman',                         // set sesuai data relasi orang
+      color: const Color(0xFF548F21),         // warna label relasi (custom)
+      action: CircleButton(
+        iconAsset: 'assets/icon/three_dots.svg',
+        variant: CircleBtnVariant.filled,
+        size: 40, iconSize: 22,
+        onTap: () { /* menu */ },
+      ),
+      body: PersonDetailPage(id: id),         // konten detail
+      scrollable: true,
+    );
+  },
+),
   ];
 }
