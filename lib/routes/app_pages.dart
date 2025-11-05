@@ -43,7 +43,13 @@ class AppPages {
           () => FormScaffold(
             title: "Buat Jurnal",
             body: ComposePage(),
-            action: ActionButton(label: "Unggah", onPressed: () {}, height: 40),
+            action: ActionButton(
+              label: "Unggah",
+              onPressed: () {},
+              height: 40,
+              showShadow: true,
+              
+            ),
           ),
     ),
     // GetPage(name: Routes.compose, page: () => const ComposePage()),

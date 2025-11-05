@@ -15,7 +15,14 @@ class ActionButton extends StatelessWidget {
     this.trailing,
     this.loading = false,
     this.disabled = false,
-    this.gradient, // override gradient jika perlu
+    this.gradient,
+
+    // NEW: Shadow options (optional)
+    this.showShadow = false,
+    this.shadowColor,                 // default: auto per-variant
+    this.shadowBlur = 12,
+    this.shadowOffset = const Offset(0, 0),
+    this.shadowSpread = 0,
   });
 
   final String label;
@@ -30,30 +37,55 @@ class ActionButton extends StatelessWidget {
   final bool disabled;
   final Gradient? gradient;
 
+  // shadow
+  final bool showShadow;
+  final Color? shadowColor;
+  final double shadowBlur;
+  final Offset shadowOffset;
+  final double shadowSpread;
+
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final bool isDisabled = disabled || loading || onPressed == null;
 
-    // COLORS
-    final Color brand = cs.primary; // warna brand (ungu kebiruan)
-    final Color brand2 = cs.tertiary; // aksen (ungu/pink)
-    final Color neutralBg = cs.surfaceContainerHighest; // abu
-    final Color neutralText = brand; // teks ungu di tombol abu
-    final Color destructiveBg = const Color(0xFFD32F2F); // merah
+    // Colors
+    final Color brand = cs.primary;
+    final Color brand2 = cs.tertiary;
+    final Color neutralBg = cs.surfaceContainerHighest;
+    final Color neutralText = brand;
+    final Color destructiveBg = const Color(0xFFD32F2F);
     final Color white = cs.onPrimary;
 
-    // DECORATION per variant
-    BoxDecoration deco;
-    TextStyle textStyle =
-        Theme.of(context).textTheme.labelLarge ??
-        const TextStyle(fontSize: 14, fontWeight: FontWeight.w600);
+    // Base text style
+    TextStyle textStyle = (Theme.of(context).textTheme.labelLarge ??
+            const TextStyle(fontSize: 14, fontWeight: FontWeight.w600))
+        .copyWith(letterSpacing: .2);
 
+    // Auto shadow color per variant (jika tidak diset)
+    Color autoShadow = switch (variant) {
+      PillButtonVariant.neutral => brand.withAlpha(50),       // lembut
+      PillButtonVariant.primaryGradient => brand.withAlpha(70),
+      PillButtonVariant.destructive => destructiveBg.withAlpha(70),
+    };
+
+    // Decoration per variant
+    BoxDecoration deco;
     switch (variant) {
       case PillButtonVariant.neutral:
         deco = BoxDecoration(
           color: neutralBg,
           borderRadius: BorderRadius.circular(radius),
+          boxShadow: (!isDisabled && showShadow)
+              ? [
+                  BoxShadow(
+                    color: (shadowColor ?? autoShadow),
+                    blurRadius: shadowBlur,
+                    offset: shadowOffset,
+                    spreadRadius: shadowSpread,
+                  ),
+                ]
+              : const [],
         );
         textStyle = textStyle.copyWith(
           color: isDisabled ? neutralText.withAlpha(120) : neutralText,
@@ -62,39 +94,44 @@ class ActionButton extends StatelessWidget {
 
       case PillButtonVariant.primaryGradient:
         deco = BoxDecoration(
-          gradient:
-              gradient ??
+          gradient: gradient ??
               LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  brand, // kiri
-                  brand2, // kanan
-                ],
+                colors: [brand, brand2],
               ),
           borderRadius: BorderRadius.circular(radius),
+          boxShadow: (!isDisabled && showShadow)
+              ? [
+                  BoxShadow(
+                    color: (shadowColor ?? autoShadow),
+                    blurRadius: shadowBlur,
+                    offset: shadowOffset,
+                    spreadRadius: shadowSpread,
+                  ),
+                ]
+              : const [],
         );
-        textStyle = textStyle.copyWith(
-          color: white,
-          fontWeight: FontWeight.w700,
-        );
+        textStyle = textStyle.copyWith(color: white, fontWeight: FontWeight.w700);
         break;
 
       case PillButtonVariant.destructive:
         deco = BoxDecoration(
           color: destructiveBg,
           borderRadius: BorderRadius.circular(radius),
+          boxShadow: (!isDisabled && showShadow)
+              ? [
+                  BoxShadow(
+                    color: (shadowColor ?? autoShadow),
+                    blurRadius: shadowBlur,
+                    offset: shadowOffset,
+                    spreadRadius: shadowSpread,
+                  ),
+                ]
+              : const [],
         );
-        textStyle = textStyle.copyWith(
-          color: white,
-          fontWeight: FontWeight.w600,
-        );
+        textStyle = textStyle.copyWith(color: white, fontWeight: FontWeight.w600);
         break;
-    }
-
-    // Disabled overlay (gunakan alpha)
-    if (isDisabled) {
-      deco = deco.copyWith(boxShadow: const []);
     }
 
     final Widget content = Padding(
@@ -107,8 +144,7 @@ class ActionButton extends StatelessWidget {
           children: [
             if (loading)
               SizedBox(
-                width: 18,
-                height: 18,
+                width: 18, height: 18,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(
@@ -119,10 +155,7 @@ class ActionButton extends StatelessWidget {
             else if (leading != null) ...[
               IconTheme.merge(
                 data: IconThemeData(
-                  color:
-                      (variant == PillButtonVariant.neutral)
-                          ? neutralText
-                          : white,
+                  color: (variant == PillButtonVariant.neutral) ? neutralText : white,
                   size: 18,
                 ),
                 child: leading!,
@@ -130,21 +163,13 @@ class ActionButton extends StatelessWidget {
               const SizedBox(width: 8),
             ],
             Flexible(
-              child: Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: textStyle,
-              ),
+              child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: textStyle),
             ),
             if (!loading && trailing != null) ...[
               const SizedBox(width: 8),
               IconTheme.merge(
                 data: IconThemeData(
-                  color:
-                      (variant == PillButtonVariant.neutral)
-                          ? neutralText
-                          : white,
+                  color: (variant == PillButtonVariant.neutral) ? neutralText : white,
                   size: 18,
                 ),
                 child: trailing!,
