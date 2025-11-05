@@ -35,9 +35,9 @@ class BrandColors {
   static const inversePrimary = Color(0xFF69D5FF);
 
   // DARK
-  static const dPrimary      = Color(0xFF4CC9F0);
-  static const dOnPrimary    = Color(0xFF00212C);
-  static const dPrimaryCtr   = Color(0xFF004C61);
+  static const dPrimary      = Color(0xFF6043F3);
+  static const dOnPrimary    = Color(0xFF2F2B44);
+  static const dPrimaryCtr   = Color(0xFF2F2B44);
   static const dOnPrimaryCtr = Colors.white;
 
   static const dSecondary      = Color(0xFF71D0D6);
@@ -45,7 +45,7 @@ class BrandColors {
   static const dSecondaryCtr   = Color(0xFF0E4E54);
   static const dOnSecondaryCtr = Colors.white;
 
-  static const dTertiary      = Color(0xFFB6A6FF);
+  static const dTertiary      = Color(0xFFFDA9C1);
   static const dOnTertiary    = Color(0xFF231957);
   static const dTertiaryCtr   = Color(0xFF372E87);
   static const dOnTertiaryCtr = Colors.white;
