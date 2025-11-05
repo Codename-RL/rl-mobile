@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sapa_mobile/widget/relation_label.dart';
+import 'package:sapa_mobile/widgets/relation_label.dart';
 import '../button/circle_icon_button.dart';   // CircleButton 2-variant mu
           // widget label gradien
 

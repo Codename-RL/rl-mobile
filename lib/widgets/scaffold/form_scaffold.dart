@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sapa_mobile/widget/button/circle_icon_button.dart';
+import 'package:sapa_mobile/widgets/button/circle_icon_button.dart';
 // import '../widgets/circle_icon_button.dart';
 
 /// Scaffold ringan untuk halaman form/detail tanpa navbar.

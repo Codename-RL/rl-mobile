@@ -1,7 +1,7 @@
 // layout/plain_scaffold.dart
 import 'package:flutter/material.dart';
-import 'package:sapa_mobile/widget/bg_bubbles.dart';
-import 'package:sapa_mobile/widget/header_bar.dart';
+import 'package:sapa_mobile/widgets/bg_bubbles.dart';
+import 'package:sapa_mobile/widgets/header_bar.dart';
 
 
 class PlainScaffold extends StatelessWidget {
