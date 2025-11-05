@@ -17,6 +17,7 @@ class SapaApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       initialRoute: Routes.journal,
       getPages: AppPages.pages,
+      
     );
   }
 }

@@ -6,11 +6,10 @@ import '../core/nav_controller.dart';
 class Navbar extends StatelessWidget {
   const Navbar({super.key});
 
-
-  static const _iconSize = 32.0;     // ukuran ikon SVG normal
-  static const _composeSize = 54.0;  // ukuran ikon SVG untuk compose
-  static const _itemBox = 36.0;      // kotak normal
-  static const _bubbleBox = 58.0;    // kotak compose/bubble
+  static const _iconSize = 32.0; // ukuran ikon SVG normal
+  static const _composeSize = 54.0; // ukuran ikon SVG untuk compose
+  static const _itemBox = 36.0; // kotak normal
+  static const _bubbleBox = 58.0; // kotak compose/bubble
 
   @override
   Widget build(BuildContext context) {
@@ -27,36 +26,50 @@ class Navbar extends StatelessWidget {
         final active = c.index.value == i;
         final file = active ? assetFilled : asset;
 
-        // jika bubble = true → gunakan ukuran compose
-        final svg = SvgPicture.asset(
-          file,
-          width: bubble ? _composeSize : _iconSize,
-          height: bubble ? _composeSize : _iconSize,
-          // colorFilter: ColorFilter.mode(
-          //   active ? cs.onPrimary : cs.onSurface,
-          //   BlendMode.srcIn,
-          // ),
+        final boxSide = bubble ? _bubbleBox : _itemBox;
+        final w = bubble ? _composeSize : _iconSize;
+        final h = w;
+
+        // --- HANYA ANIMASI ICON-NYA (fade), ukuran & padding tetap ---
+        final icon = SizedBox(
+          width: w,
+          height: h,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            transitionBuilder:
+                (child, anim) => FadeTransition(opacity: anim, child: child),
+            child: KeyedSubtree(
+              key: ValueKey(file), // kunci berbeda utk stroke vs filled
+              child: SvgPicture.asset(
+                file,
+                width: w,
+                height: h,
+                // colorFilter: ColorFilter.mode(
+                //   active ? cs.onPrimary : cs.onSurface,
+                //   BlendMode.srcIn,
+                // ),
+              ),
+            ),
+          ),
         );
 
-        final boxSide = bubble ? _bubbleBox : _itemBox;
-
-       final child = active && bubble
-            ? DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(child: svg),
-              )
-            : Center(child: svg);
+        final child =
+            active && bubble
+                ? DecoratedBox(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(child: icon),
+                )
+                : Center(child: icon);
 
         return InkWell(
           borderRadius: BorderRadius.circular(boxSide / 2),
           onTap: () => c.go(i),
-          child: SizedBox.square(
-            dimension: boxSide,
-            child: child,
-          ),
+          child: SizedBox.square(dimension: boxSide, child: child),
         );
       });
     }
@@ -65,9 +78,12 @@ class Navbar extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
       decoration: BoxDecoration(
-        color: Color.alphaBlend(Colors.black.withAlpha(40), cs.primary.withAlpha(50)),
+        color: Color.alphaBlend(
+          Colors.black.withAlpha(40),
+          cs.primary.withAlpha(50),
+        ),
         borderRadius: BorderRadius.circular(100),
-        border: Border.all(color: Colors.white.withAlpha(30), width: 1)
+        border: Border.all(color: Colors.white.withAlpha(30), width: 1),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,5 +119,3 @@ class Navbar extends StatelessWidget {
     );
   }
 }
-
-

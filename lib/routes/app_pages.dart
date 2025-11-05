@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sapa_mobile/routes/app_routes.dart';
 import 'package:sapa_mobile/widget/action_button.dart';
@@ -15,10 +16,17 @@ class AppPages {
   static final pages = <GetPage>[
     GetPage(
       name: Routes.journal,
-      page: () => const MainScaffold(title: 'Jurnal', body: JournalPage()),
+      transition: Transition.noTransition,
+      page:
+          () => const MainScaffold(
+            title: 'Jurnal',
+            pageKey: ValueKey('tab-journal'),
+            body: JournalPage(),
+          ),
     ),
     GetPage(
       name: Routes.people,
+      transition: Transition.noTransition,
       page:
           () => MainScaffold(
             title: 'Orang',
@@ -29,12 +37,19 @@ class AppPages {
               iconSize: 18,
               onTap: () {},
             ),
+            pageKey: ValueKey('tab-people'),
             body: PeoplePage(),
           ),
     ),
     GetPage(
       name: Routes.reminder,
-      page: () => MainScaffold(title: 'Reminder', body: const ReminderPage()),
+      transition: Transition.noTransition,
+      page:
+          () => MainScaffold(
+            title: 'Reminder',
+            pageKey: ValueKey('tab-reminder'),
+            body: const ReminderPage(),
+          ),
     ),
     // Halaman tanpa navbar
     GetPage(
@@ -48,7 +63,6 @@ class AppPages {
               onPressed: () {},
               height: 40,
               showShadow: true,
-              
             ),
           ),
     ),
