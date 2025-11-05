@@ -6,7 +6,7 @@ class ComposePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Buat Jurnal')),
+      // appBar: AppBar(title: const Text('Buat Jurnal')),
       body: const Center(child: Text('Form Compose di sini')),
     );
   }

@@ -27,7 +27,7 @@ class MainScaffold extends StatelessWidget {
         Column(children: [
           HeaderBar(title: title, titleWidget: titleWidget, action: action),
           Expanded(child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: body,
           )),
         ]),

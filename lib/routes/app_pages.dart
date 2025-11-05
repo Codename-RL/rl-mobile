@@ -1,13 +1,15 @@
 import 'package:get/get.dart';
 import 'package:sapa_mobile/routes/app_routes.dart';
+import 'package:sapa_mobile/widget/action_button.dart';
 import 'package:sapa_mobile/widget/circle_icon_button.dart';
+import 'package:sapa_mobile/widget/scaffold/form_scaffold.dart';
 import 'package:sapa_mobile/widget/scaffold/main_scaffold.dart';
 import '../modules/journal/journal_page.dart';
 import '../modules/people/people_page.dart';
 import '../modules/compose/compose_page.dart';
 import '../modules/reminder/reminder_page.dart';
 import '../modules/setting/setting_page.dart';
-import '../core/nav_controller.dart';
+// import '../core/nav_controller.dart';
 
 class AppPages {
   static final pages = <GetPage>[
@@ -20,15 +22,12 @@ class AppPages {
       page:
           () => MainScaffold(
             title: 'Orang',
-            action: CircleIconButton(
-              asset: 'assets/icon/plus.svg',
-              size: 36, // samakan dengan desain
-              iconSize: 24,
-              tone: CircleTone.primary, // atau primary
-              tooltip: 'Tambah orang',
-              onTap: () {
-                // TODO: navigasi ke form tambah orang
-              },
+            action: CircleButton(
+              iconAsset: 'assets/icon/plus.svg',
+              variant: CircleBtnVariant.stroke,
+              size: 36,
+              iconSize: 18,
+              onTap: () {},
             ),
             body: PeoplePage(),
           ),
@@ -38,7 +37,16 @@ class AppPages {
       page: () => MainScaffold(title: 'Reminder', body: const ReminderPage()),
     ),
     // Halaman tanpa navbar
-    GetPage(name: Routes.compose, page: () => const ComposePage()),
+    GetPage(
+      name: Routes.compose,
+      page:
+          () => FormScaffold(
+            title: "Buat Jurnal",
+            body: ComposePage(),
+            action: ActionButton(label: "Unggah", onPressed: () {}, height: 40),
+          ),
+    ),
+    // GetPage(name: Routes.compose, page: () => const ComposePage()),
     GetPage(name: Routes.settings, page: () => const SettingPage()),
   ];
 }
