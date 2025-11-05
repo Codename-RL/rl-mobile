@@ -5,12 +5,12 @@ class BrandColors {
   // LIGHT
   static const primary      = Color(0xFF6043F3);
   static const onPrimary    = Color(0xFFFFFFFF);
-  static const primaryCtr   = Color(0xFFB3E7FA);
-  static const onPrimaryCtr = Color(0xFF003244);
+  static const primaryCtr   = Color(0xFFFFFFFF);
+  static const onPrimaryCtr = Color(0xFFB8A7CD);
 
   static const secondary      = Color(0xFF836AFF);
   static const onSecondary    = Colors.white;
-  static const secondaryCtr   = Color(0xFFB5ECEF);
+  static const secondaryCtr   = Color(0xFF5D5D5D);
   static const onSecondaryCtr = Color(0xFF002125);
 
   static const tertiary      = Color(0xFFFDA9C1);
@@ -20,7 +20,7 @@ class BrandColors {
 
   static const surface       = Color(0xFFF5F3FE);
   static const onSurface     = Color(0xFF232323);
-  static const surfaceVar    = Color(0xFFE8ECF1);
+  static const surfaceVar    = Color(0xFF5D5D5D);
   static const onSurfaceVar  = Color(0xFF6B7280);
 
   static const outline       = Color(0xFFCBD5E1);

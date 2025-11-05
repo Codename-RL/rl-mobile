@@ -1,9 +1,8 @@
 // app.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'cores/app_theme.dart';
+import 'core/app_theme.dart';
 import 'routes/app_pages.dart';
-import 'routes/app_routes.dart';
 
 class SapaApp extends StatelessWidget {
   const SapaApp({super.key});
@@ -15,8 +14,10 @@ class SapaApp extends StatelessWidget {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
-      initialRoute: Routes.journal,
+      // initialRoute: '/',   // TabShell as entry
+      initialRoute: '/auth/reset',   // TabShell as entry
       getPages: AppPages.pages,
+      defaultTransition: Transition.noTransition, // tab tak animasi route
       
     );
   }

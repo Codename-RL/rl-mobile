@@ -1,7 +1,7 @@
 // main.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sapa_mobile/cores/nav_controller.dart';
+import 'package:sapa_mobile/core/nav_controller.dart';
 import 'app.dart';
 
 void main() {

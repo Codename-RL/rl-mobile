@@ -8,7 +8,7 @@ class ActionButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.variant = PillButtonVariant.primaryGradient,
-    this.height = 44,
+    this.height = 46,
     this.fullWidth = false,
     this.radius = 16,
     this.leading,
@@ -96,8 +96,8 @@ class ActionButton extends StatelessWidget {
         deco = BoxDecoration(
           gradient: gradient ??
               LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
                 colors: [brand, brand2],
               ),
           borderRadius: BorderRadius.circular(radius),

@@ -77,19 +77,22 @@ class _AppTextFieldState extends State<AppTextField> {
     final radius = BorderRadius.circular(16);
     final border = OutlineInputBorder(
       borderRadius: radius,
-      borderSide: BorderSide(color: cs.primary.withAlpha(90), width: 1.4),
+      borderSide: BorderSide(
+        color: cs.onPrimaryContainer.withAlpha(90),
+        width: 1.4,
+      ),
     );
 
-    final filledColor = cs.primary.withAlpha(18); // lembut seperti contoh
+    final filledColor = cs.primary.withAlpha(20); // lembut seperti contoh
 
     final suffix = switch (widget.type) {
       AppTextFieldType.password => IconButton(
-          onPressed: () => setState(() => _obscure = !_obscure),
-          icon: Icon(
-            _obscure ? Icons.visibility_off : Icons.visibility,
-            color: cs.primary,
-          ),
+        onPressed: () => setState(() => _obscure = !_obscure),
+        icon: Icon(
+          _obscure ? Icons.visibility_off : Icons.visibility,
+          color: cs.primary,
         ),
+      ),
       _ => null,
     };
 
@@ -117,11 +120,11 @@ class _AppTextFieldState extends State<AppTextField> {
         Text(
           widget.label,
           style: tt.labelLarge?.copyWith(
-            color: cs.primary,
+            color: cs.onPrimaryContainer,
             fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
 
         // Field
         Focus(
@@ -146,14 +149,20 @@ class _AppTextFieldState extends State<AppTextField> {
             },
             decoration: InputDecoration(
               hintText: widget.hintText,
+              hintStyle: tt.labelLarge?.copyWith(
+                color: cs.onSurface.withAlpha(80),
+              ),
               filled: true,
               fillColor: filledColor,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 15 ,
+              ),
               enabledBorder: border,
               focusedBorder: border.copyWith(
                 borderSide: BorderSide(
-                  color: cs.primary, width: 1.6,
+                  color: cs.secondary.withAlpha(150),
+                  width: 2,
                 ),
               ),
               disabledBorder: border,
@@ -164,26 +173,19 @@ class _AppTextFieldState extends State<AppTextField> {
                 borderSide: BorderSide(color: cs.error, width: 1.6),
               ),
               suffixIcon: suffix,
+
+              // HANYA tampil kalau ada error & sudah pernah tersentuh
+              errorText: _touched ? _error : null,
+              // opsional: rapikan jarak
+              isDense: true,
+              errorStyle: tt.labelSmall?.copyWith(color: cs.error),
             ),
-            style: tt.bodyLarge?.copyWith(color: cs.onSurface),
+
+            style: tt.labelLarge?.copyWith(color: cs.onSurface.withAlpha(200)),
           ),
         ),
 
         // Error di kanan bawah field
-        SizedBox(
-          height: 22,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 150),
-              opacity: (_error != null) ? 1 : 0,
-              child: Text(
-                _error ?? '',
-                style: tt.bodySmall?.copyWith(color: cs.error),
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }
