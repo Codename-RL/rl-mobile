@@ -15,7 +15,7 @@ class SapaApp extends StatelessWidget {
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
       // initialRoute: '/',   // TabShell as entry
-      initialRoute: '/auth/reset',   // TabShell as entry
+      initialRoute: '/',   // TabShell as entry
       getPages: AppPages.pages,
       defaultTransition: Transition.noTransition, // tab tak animasi route
       

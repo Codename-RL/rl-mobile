@@ -4,4 +4,5 @@ abstract class AuthRoutes {
   static const register = '/auth/register';
   static const otp      = '/auth/otp';
   static const reset    = '/auth/reset';
+  static const forgot    = '/auth/forgot';
 }
