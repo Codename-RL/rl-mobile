@@ -1,74 +1,93 @@
+// lib/widgets/circle_button.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-/// Tombol bulat dengan opsi:
-/// - variant: filled (isi solid) / ghost (tanpa isi)
-/// - tone: primary / tertiary / custom
-/// - fillOpacity: transparansi isi (only for filled)
-class CircleIconButton extends StatelessWidget {
-  const CircleIconButton({
+enum CircleBtnVariant { filled, stroke }
+
+class CircleButton extends StatelessWidget {
+  const CircleButton({
     super.key,
-    required this.asset,
+    required this.iconAsset,          // path SVG
     this.onTap,
-    this.size = 40,
-    this.iconSize = 20,
-    this.variant = CircleVariant.filled,
-    this.tone = CircleTone.primary,
-    this.customColor,
+    this.size = 40,                   // diameter
+    this.iconSize = 20,               // ukuran ikon
+    this.variant = CircleBtnVariant.filled,
+    this.strokeWidth = 2,
+    this.strokeBgAlpha = 28,          // bg alpha utk variant stroke (0..255)
+    this.shadowBlur = 12,
+    this.shadowOffset = const Offset(0, 0),
+    this.semanticLabel,
     this.tooltip,
-    this.borderWidth = 2,
   });
 
-  final String asset;
+  final String iconAsset;
   final VoidCallback? onTap;
   final double size;
   final double iconSize;
-  final CircleVariant variant;
-  final CircleTone tone;
-  final Color? customColor;
-  // final double fillOpacity; // dipakai saat variant = filled
+  final CircleBtnVariant variant;
+  final double strokeWidth;
+  final int strokeBgAlpha;            // hanya untuk stroke
+  final double shadowBlur;            // hanya untuk filled
+  final Offset shadowOffset;          // hanya untuk filled
+  final String? semanticLabel;
   final String? tooltip;
-  final double borderWidth;
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final Color primary = cs.primary;
+    final Color onPrimary = cs.onPrimary;
 
-    // pilih warna dasar dari tema/ custom
-    final Color base = switch (tone) {
-      CircleTone.primary => cs.primary,
-      CircleTone.tertiary => cs.tertiary,
-      CircleTone.custom => (customColor ?? cs.primary),
-    };
+    // Ikon SELALU warna primary
+    final Color iconColor = primary;
 
-    // final bool disabled = onTap == null;
+    // Dekorasi per-varian
+    BoxDecoration deco;
+    switch (variant) {
+      case CircleBtnVariant.filled:
+        deco = BoxDecoration(
+          shape: BoxShape.circle,
+          color: onPrimary,                              // shape onPrimary
+          boxShadow: [
+            BoxShadow(                                   // shadow warna primary
+              color: primary.withAlpha(56),              // ~22% (56/255)
+              blurRadius: shadowBlur,
+              offset: shadowOffset,
+              spreadRadius: 0,
+            ),
+          ],
+        );
+        break;
 
-    // warna ikon → gunakan base, atau redup saat disabled
+      case CircleBtnVariant.stroke:
+        deco = BoxDecoration(
+          shape: BoxShape.circle,
+          color: primary.withAlpha(strokeBgAlpha),       // shape primary dgn alpha
+          border: Border.all(color: primary, width: strokeWidth),
+          // no shadow
+        );
+        break;
+    }
 
-    // ring
-    final border = Border.all(color: base, width: borderWidth);
-
-    final decoration = BoxDecoration(
-      shape: BoxShape.circle,
-      border: border,
-      // fill solid (tanpa gradient)
-      color: base.withAlpha(30),
-    );
-
-    final btn = InkResponse(
-      onTap: onTap,
-      customBorder: const CircleBorder(),
-      radius: size,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: decoration,
-        child: Center(
-          child: SvgPicture.asset(
-            asset,
-            width: iconSize,
-            height: iconSize,
-            colorFilter: ColorFilter.mode(base, BlendMode.srcIn),
+    final btn = Semantics(
+      button: true,
+      label: semanticLabel ?? tooltip,
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onTap,
+          child: Container(
+            width: size,
+            height: size,
+            decoration: deco,
+            alignment: Alignment.center,
+            child: SvgPicture.asset(
+              iconAsset,
+              width: iconSize,
+              height: iconSize,
+              colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+            ),
           ),
         ),
       ),
@@ -77,7 +96,3 @@ class CircleIconButton extends StatelessWidget {
     return tooltip != null ? Tooltip(message: tooltip!, child: btn) : btn;
   }
 }
-
-enum CircleVariant { filled, ghost }
-
-enum CircleTone { primary, tertiary, custom }
