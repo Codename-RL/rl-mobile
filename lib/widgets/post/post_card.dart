@@ -82,7 +82,7 @@ class PostCard extends StatelessWidget {
                 ? [
                   // shadow warna primary (soft glow)
                   BoxShadow(
-                    color: (shadowColor ?? cs.primary).withAlpha(30),
+                    color: (shadowColor ?? cs.primary).withAlpha(45),
                     blurRadius: 5,
                     spreadRadius: .5,
                     offset: const Offset(0, 0),
