@@ -34,6 +34,7 @@ flutter:
   assets:
     - assets/icon/
     - assets/icon/nav/
+    - assets/image/
 
 flutter_launcher_icons:
   android: true

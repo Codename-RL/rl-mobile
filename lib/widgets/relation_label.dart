@@ -1,19 +1,19 @@
-// lib/widgets/relasi_label.dart
+// lib/widgets/relation_label.dart
 import 'package:flutter/material.dart';
 
 class RelasiLabel extends StatelessWidget {
   const RelasiLabel({
     super.key,
     required this.label,
-    required this.color, // warna custom (mis. hijau relasi)
-    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-    this.radius = 28,
+    this.color, // boleh null → fallback ke theme.primary
+    this.padding = const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+    this.radius = 32,
     this.begin = Alignment.centerLeft,
     this.end = Alignment.centerRight,
   });
 
   final String label;
-  final Color color;
+  final Color? color;
   final EdgeInsets padding;
   final double radius;
   final Alignment begin;
@@ -22,9 +22,7 @@ class RelasiLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-
-    // teks dibuat sedikit lebih gelap dari warna custom agar kontras
-    final textColor = color;
+    final base = color ?? cs.primary; // fallback aman
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -32,32 +30,25 @@ class RelasiLabel extends StatelessWidget {
           begin: begin,
           end: end,
           colors: [
-            color.withAlpha(90), // dari warna custom
-            cs.onPrimary, // ke onPrimary (terlihat seperti contoh)
+            base.withAlpha(90),     // dari warna custom/primary
+            cs.onPrimary,           // ke onPrimary
           ],
         ),
         borderRadius: BorderRadius.circular(radius),
-        // garis halus memakai warna custom dengan alpha
-        // border: Border.all(color: color, width: 1),
+        // border: Border.all(color: base.withAlpha(100), width: 1),
       ),
       child: Padding(
         padding: padding,
         child: Text(
           label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            fontWeight: FontWeight.w700,
-            color: textColor,
-            // letterSpacing: .2,
-          ),
+                fontWeight: FontWeight.w700,
+                color: base, // kontras tetap dari base
+              ),
         ),
       ),
     );
   }
-
-  // bantu gelapkan warna agar teks kontras
-  // Color _darken(Color c, double amount) {
-  //   final hsl = HSLColor.fromColor(c);
-  //   final l = (hsl.lightness - amount).clamp(0.0, 1.0);
-  //   return hsl.withLightness(l).toColor();
-  // }
 }
