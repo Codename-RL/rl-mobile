@@ -125,7 +125,10 @@ class PostCard extends StatelessWidget {
                           // chip bisa memendek bila sempit
                           child: RelasiLabel(
                             label: relationText!,
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 2,
+                            ),
                             color: relationColor, // boleh null sekarang
                           ),
                         ),
@@ -174,7 +177,13 @@ class PostCard extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 12),
-            EmotionPicker()
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const [
+                // Tombol aksi lainnya bisa ditambahkan di sini
+                EmotionPicker(),
+              ],
+            ),
           ],
         ),
       ),

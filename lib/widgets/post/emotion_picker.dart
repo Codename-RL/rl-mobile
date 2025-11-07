@@ -14,11 +14,11 @@ class EmotionPicker extends StatefulWidget {
 }
 
 class _EmotionPickerState extends State<EmotionPicker> {
-  bool _isHolding = false;
   String? _selectedEmotion;
 
+  // Path ke emosi yang sesuai
   final List<String> emotions = [
-    'assets/icon/emotion/love.svg', // default love stroke
+    'assets/icon/emotion/love.svg', // default love stroke (belum dipilih)
     'assets/icon/emotion/angry.svg',
     'assets/icon/emotion/happy.svg',
     'assets/icon/emotion/laugh.svg',
@@ -35,76 +35,83 @@ class _EmotionPickerState extends State<EmotionPicker> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () {
-        setState(() {
-          _isHolding = true;
-        });
-      },
-      onLongPressEnd: (details) {
-        setState(() {
-          _isHolding = false;
-        });
-      },
       onTap: () {
-        if (_isHolding && _selectedEmotion != null) {
-          // Aksi saat memilih emosi, misalnya mengirim emosi
-          print('Selected Emotion: $_selectedEmotion');
-        }
+        setState(() {
+          // Jika hanya menekan (tanpa menahan), ganti ke love filled
+          if (_selectedEmotion == 'assets/icon/love_stroke.svg') {
+            _selectedEmotion = 'assets/icon/emotion/love.svg'; // Love filled
+          }else {
+            _selectedEmotion = 'assets/icon/love_stroke.svg'; // Kembali ke love stroke
+          }
+        });
       },
-      child: Stack(
-        children: [
-          // Tampilkan pilihan emosi di tengah layar
-          if (_isHolding)
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.center,
-                child: Material(
-                  color: Colors.transparent,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      emotions.length,
-                      (index) => GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedEmotion = emotions[index];
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: SvgPicture.asset(
-                            emotions[index],
-                            width: 40,
-                            height: 40,
-                            colorFilter: _selectedEmotion == emotions[index]
-                                ? ColorFilter.mode(Colors.blue, BlendMode.srcIn)
-                                : null,
-                          ),
+      onLongPress: () {
+        // Tampilkan pilihan emosi saat menahan
+        _showEmotionPicker(context);
+      },
+      child: Center(
+        child: SvgPicture.asset(
+          _selectedEmotion!,
+          width: 18,
+          height: 18,
+        ),
+      ),
+    );
+  }
+
+  // Fungsi untuk menampilkan modal bottom sheet dengan pilihan emosi
+  void _showEmotionPicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return GestureDetector(
+          onTap: () {
+            // Jangan menutup pop-up jika mengklik di luar modal
+          },
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              height: 200,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  emotions.length,
+                  (index) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedEmotion = emotions[index]; // Pilih emosi
+                        });
+                        Navigator.pop(context); // Tutup bottom sheet setelah memilih
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: SvgPicture.asset(
+                          emotions[index],
+                          width: 50,
+                          height: 50,
+                          // colorFilter: _selectedEmotion == emotions[index]
+                          //     ? ColorFilter.mode(Colors.blue, BlendMode.srcIn)
+                          //     : null,
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
             ),
-          // Tampilkan ikon yang dipilih atau default
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _isHolding = true;
-              });
-            },
-            child: Center(
-              child: SvgPicture.asset(
-                _selectedEmotion!,
-                width: 60,
-                height: 60,
-                // Tanpa colorFilter, ikon akan tampil dengan warna asli
-              ),
-            ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
