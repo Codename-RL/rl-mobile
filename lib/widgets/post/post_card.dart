@@ -1,5 +1,6 @@
 // lib/widgets/post/post_card.dart
 import 'package:flutter/material.dart';
+import 'package:sapa_mobile/widgets/post/emotion_picker.dart';
 import 'package:sapa_mobile/widgets/post/image_carousel.dart';
 import 'package:sapa_mobile/widgets/post/location_label.dart';
 import 'package:sapa_mobile/widgets/post/profile_label.dart';
@@ -172,6 +173,8 @@ class PostCard extends StatelessWidget {
                 child: SquareImageCarousel(images: images!, radius: 20),
               ),
             ],
+            const SizedBox(height: 12),
+            EmotionPicker()
           ],
         ),
       ),
