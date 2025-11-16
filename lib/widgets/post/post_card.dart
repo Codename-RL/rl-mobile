@@ -187,7 +187,7 @@ class PostCard extends StatelessWidget {
               children: const [
                 // Tombol aksi lainnya bisa ditambahkan di sini
                 JournalReminderIcon(),
-                SizedBox(width: 12),
+                SizedBox(width: 4),
                 EmotionPicker(),
               ],
             ),

@@ -54,6 +54,7 @@ class IconGradientButton extends StatelessWidget {
     final deco = BoxDecoration(
       gradient:
           gradient ??
+          
           LinearGradient(
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
