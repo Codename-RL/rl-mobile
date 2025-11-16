@@ -1,8 +1,10 @@
 // lib/widgets/post/post_card.dart
 import 'package:flutter/material.dart';
 import 'package:sapa_mobile/widgets/form/date_time_picker.dart';
+import 'package:sapa_mobile/widgets/form/repeat_dropdown.dart';
 import 'package:sapa_mobile/widgets/post/emotion_picker.dart';
 import 'package:sapa_mobile/widgets/post/image_carousel.dart';
+import 'package:sapa_mobile/widgets/post/journal_reminder.dart';
 import 'package:sapa_mobile/widgets/post/location_label.dart';
 import 'package:sapa_mobile/widgets/post/profile_label.dart';
 import 'package:sapa_mobile/widgets/post/tag_list.dart';
@@ -178,11 +180,14 @@ class PostCard extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 12),
-            DateTimePicker(),
+            
+
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: const [
                 // Tombol aksi lainnya bisa ditambahkan di sini
+                JournalReminderIcon(),
+                SizedBox(width: 12),
                 EmotionPicker(),
               ],
             ),

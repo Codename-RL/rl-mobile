@@ -50,11 +50,12 @@ class ActionButton extends StatelessWidget {
     final bool isDisabled = disabled || loading || onPressed == null;
 
     // Colors
+    // final Color neutralBg = cs.surfaceContainerHighest;
     final Color brand = cs.primary;
     final Color brand2 = cs.tertiary;
-    final Color neutralBg = cs.surfaceContainerHighest;
+    final Color neutralBg = cs.onPrimaryContainer.withAlpha(80);
     final Color neutralText = brand;
-    final Color destructiveBg = const Color(0xFFD32F2F);
+    final Color destructiveBg = cs.error;
     final Color white = cs.onPrimary;
 
     // Base text style
