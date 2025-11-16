@@ -116,7 +116,7 @@ class _ComposeImagePickerState extends State<ComposeImagePicker> {
             child: Ink(
               decoration: BoxDecoration(
                 color: cs.primary.withAlpha(20),
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
