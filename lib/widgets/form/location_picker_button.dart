@@ -25,30 +25,30 @@ class ComposeLocationPickerButton extends StatelessWidget {
     final tt = Theme.of(context).textTheme;
 
     return SizedBox(
-      height: 56,
+      height: 44,
       child: InkWell(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(8),
         onTap: _openLocationSearch,
         child: Ink(
           decoration: BoxDecoration(
             color: cs.primary.withAlpha(20),
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                'assets/icon/location_mark.svg',
+                'assets/icon/map_button.svg',
                 width: 26,
                 height: 26,
                 colorFilter: ColorFilter.mode(cs.primary, BlendMode.srcIn),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Text(
                 'Lokasi',
-                style: tt.titleMedium?.copyWith(
+                style: tt.titleSmall?.copyWith(
                   color: cs.primary,
-                  fontWeight: FontWeight.w600,
+                  // fontWeight: FontWeight.w600,
                 ),
               ),
             ],
