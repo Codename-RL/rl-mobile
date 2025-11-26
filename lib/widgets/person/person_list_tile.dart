@@ -17,7 +17,11 @@ class PersonOption {
   });
 }
 
-enum PersonTileVariant { outline, gradient }
+enum PersonTileVariant {
+  outline,
+  gradient,
+  surface,
+}
 
 class PersonListTile extends StatelessWidget {
   const PersonListTile({
@@ -38,8 +42,11 @@ class PersonListTile extends StatelessWidget {
 
     final radius = BorderRadius.circular(16);
 
+    final bool isGradient = variant == PersonTileVariant.gradient;
+    final bool useSurfaceStyle = variant == PersonTileVariant.surface;
+
     final BoxDecoration decoration;
-    if (variant == PersonTileVariant.gradient) {
+    if (isGradient) {
       decoration = BoxDecoration(
         borderRadius: radius,
         gradient: LinearGradient(
@@ -52,7 +59,16 @@ class PersonListTile extends StatelessWidget {
         ),
         border: Border.all(
           color: Colors.white.withAlpha(160),
-          width: 1.4,
+          width: 2,
+        ),
+      );
+    } else if (useSurfaceStyle) {
+      decoration = BoxDecoration(
+        borderRadius: radius,
+        color: cs.surface.withAlpha(180),
+        border: Border.all(
+          color: cs.primary.withAlpha(50),
+          width: 2,
         ),
       );
     } else {
@@ -61,18 +77,16 @@ class PersonListTile extends StatelessWidget {
         color: cs.surface,
         border: Border.all(
           color: cs.primary.withAlpha(160),
-          width: 1.4,
+          width: 2,
         ),
       );
     }
 
-    final nameColor =
-        variant == PersonTileVariant.gradient ? Colors.white : cs.onSurface;
-    final tagColor =
-        variant == PersonTileVariant.gradient ? Colors.white : cs.primary;
+    final nameColor = isGradient ? Colors.white : cs.onSurface;
+    final tagColor = isGradient ? Colors.white : cs.primary;
     final relationColor = Colors.green.shade600;
 
-    return ClipRRect(
+    final Widget tileContent = ClipRRect(
       borderRadius: radius,
       child: Material(
         color: Colors.transparent,
@@ -156,6 +170,22 @@ class PersonListTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+
+    if (!useSurfaceStyle) return tileContent;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: radius,
+        boxShadow: [
+          BoxShadow(
+            color: cs.primary.withAlpha(24),
+            blurRadius: 8,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: tileContent,
     );
   }
 }

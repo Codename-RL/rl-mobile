@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+enum AppSearchBarVariant { primary, surface }
+
 class AppSearchBar extends StatelessWidget {
   const AppSearchBar({
     super.key,
@@ -10,6 +12,7 @@ class AppSearchBar extends StatelessWidget {
     this.onChanged,
     this.showFilter = false,
     this.onFilterTap,
+    this.variant = AppSearchBarVariant.primary,
   });
 
   final TextEditingController controller;
@@ -21,19 +24,27 @@ class AppSearchBar extends StatelessWidget {
 
   /// dipanggil ketika icon filter di-tap
   final VoidCallback? onFilterTap;
+  final AppSearchBarVariant variant;
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
 
+    final bool isSurfaceVariant = variant == AppSearchBarVariant.surface;
+    final Color bgColor =
+        isSurfaceVariant ? cs.surface : cs.primary.withAlpha(20);
+    final Color borderColor =
+        isSurfaceVariant ? cs.outlineVariant : cs.primary.withAlpha(45);
+    final Color iconColor = cs.primary;
+
     return Container(
       height: 46,
       decoration: BoxDecoration(
-        color: cs.primary.withAlpha(20),
+        color: bgColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: cs.primary.withAlpha(45),
+          color: borderColor,
           width: 1.4,
         ),
       ),
@@ -46,7 +57,7 @@ class AppSearchBar extends StatelessWidget {
             'assets/icon/search.svg', // ganti sesuai path SVG-mu
             width: 32,
             height: 32,
-            colorFilter: ColorFilter.mode(cs.primary, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
           ),
           const SizedBox(width: 12),
 
@@ -60,7 +71,9 @@ class AppSearchBar extends StatelessWidget {
                 isDense: true,
                 hintText: hintText,
                 hintStyle: tt.titleSmall?.copyWith(
-                  color: cs.onSurface.withAlpha(120),
+                  color: isSurfaceVariant
+                      ? cs.onSurfaceVariant
+                      : cs.onSurface.withAlpha(120),
                 ),
               ),
               style: tt.titleSmall?.copyWith(
@@ -80,7 +93,7 @@ class AppSearchBar extends StatelessWidget {
                   'assets/icon/filter.svg', // ganti sesuai path SVG-mu
                   width: 32,
                   height: 32,
-                  colorFilter: ColorFilter.mode(cs.primary, BlendMode.srcIn),
+                  colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
                 ),
               ),
             )
