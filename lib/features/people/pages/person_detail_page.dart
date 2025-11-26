@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sapa_mobile/widgets/button/square_icon_button.dart';
 import 'package:sapa_mobile/widgets/person/person_detail_tab.dart';
 import 'package:sapa_mobile/widgets/post/post_card.dart';
 
@@ -74,8 +75,28 @@ class _PersonDetailPageState extends State<PersonDetailPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Terbaru', style: tt.titleSmall?.copyWith(color: cs.primary)),
-        const SizedBox(height: 6),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Terbaru',
+                style: tt.titleSmall?.copyWith(color: cs.primary),
+              ),
+            ),
+            SquareIconButton(
+              iconAsset: 'assets/icon/calendar.svg',
+              tooltip: 'Lihat Kalender',
+              onTap: () {},
+            ),
+            const SizedBox(width: 8),
+            SquareIconButton(
+              iconAsset: 'assets/icon/map.svg',
+              tooltip: 'Lihat Peta',
+              onTap: () {},
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
         for (var i = 0; i < posts.length; i++) ...[
           posts[i],
           if (i != posts.length - 1) const SizedBox(height: 16),
