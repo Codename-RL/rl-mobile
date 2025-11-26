@@ -53,7 +53,7 @@ final peoplePages = <GetPage>[
           photoUrl: dummyPhoto,
           tags: dummyTags,
         ),
-        scrollable: true,
+        scrollable: false,
         // ⬇️ kalau di ProfileScaffold ada parameter heroHeight, isi ini:
         // heroHeight: PersonTopProfile.estimateHeight(dummyTags),
       );

@@ -108,18 +108,19 @@ class _PersonDetailPageState extends State<PersonDetailPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        
-
         PersonDetailTabs(
           currentIndex: _currentTab,
           onChanged: _onTabChanged,
         ),
-        const SizedBox(height: 6),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          child: _buildTabContent(theme),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
+              child: _buildTabContent(theme),
+            ),
+          ),
         ),
       ],
     );
