@@ -14,6 +14,8 @@ class ProfileScaffold extends StatelessWidget {
     this.onBack,                 // default: Get.back()
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
     this.scrollable = false,
+    this.hero,
+    this.heroHeight = 0,
   });
 
   final Widget body;
@@ -23,6 +25,8 @@ class ProfileScaffold extends StatelessWidget {
   final VoidCallback? onBack;
   final EdgeInsetsGeometry padding;
   final bool scrollable;
+  final Widget? hero;
+  final double heroHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -31,50 +35,63 @@ class ProfileScaffold extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: cs.surface,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // HEADER: back left, label center, action right
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
-              child: SizedBox(
-                height: 44,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Back wajib (kiri)
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: CircleButton(
-                        iconAsset: 'assets/icon/arrow_back.svg',
-                        variant: CircleBtnVariant.filled,
-                        size: 40,
-                        iconSize: 22,
-                        onTap: onBack ?? () => Get.back(),
-                      ),
+      body: Stack(
+        children: [
+          if (hero != null)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: heroHeight,
+              child: hero!,
+            ),
+          SafeArea(
+            child: Column(
+              children: [
+                // HEADER
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
+                  child: SizedBox(
+                    height: 44,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: CircleButton(
+                            iconAsset: 'assets/icon/arrow_back.svg',
+                            variant: CircleBtnVariant.filled,
+                            size: 40,
+                            iconSize: 22,
+                            onTap: onBack ?? () => Get.back(),
+                          ),
+                        ),
+                        RelasiLabel(
+                          label: label,
+                          color: color,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 4),
+                          radius: 32,
+                        ),
+                        if (action != null)
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: action!,
+                          ),
+                      ],
                     ),
-                    // Label relasi (tengah)
-                    RelasiLabel(
-                      label: label,
-                      color: color,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 4),
-                      radius: 32,
-                    ),
-                    // Action opsional (kanan)
-                    if (action != null)
-                      Align(alignment: Alignment.centerRight, child: action!),
-                  ],
+                  ),
                 ),
-              ),
+                if (hero != null) SizedBox(height: heroHeight),
+                Expanded(
+                  child: scrollable
+                      ? SingleChildScrollView(child: content)
+                      : content,
+                ),
+              ],
             ),
-
-            // BODY
-            Expanded(
-              child: scrollable ? SingleChildScrollView(child: content) : content,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
