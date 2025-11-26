@@ -6,7 +6,7 @@ import 'package:sapa_mobile/features/compose/pages/tag_picker_page.dart';
 
 import 'package:sapa_mobile/widgets/form/journal_image_picker.dart';
 import 'package:sapa_mobile/widgets/form/location_picker_button.dart';
-import 'package:sapa_mobile/widgets/form/person_picker_button.dart';
+import 'package:sapa_mobile/widgets/person/person_picker_button.dart';
 import 'package:sapa_mobile/widgets/person/person_list_tile.dart';
 import 'package:sapa_mobile/widgets/post/compose_location_label.dart';
 

@@ -36,7 +36,7 @@ class PersonListTile extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
 
-    final radius = BorderRadius.circular(28);
+    final radius = BorderRadius.circular(16);
 
     final BoxDecoration decoration;
     if (variant == PersonTileVariant.gradient) {
@@ -72,81 +72,87 @@ class PersonListTile extends StatelessWidget {
         variant == PersonTileVariant.gradient ? Colors.white : cs.primary;
     final relationColor = Colors.green.shade600;
 
-    return InkWell(
+    return ClipRRect(
       borderRadius: radius,
-      onTap: onTap,
-      child: Ink(
-        decoration: decoration,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Row(
-            children: [
-              // Avatar
-              ClipRRect(
-                borderRadius: BorderRadius.circular(999),
-                child: Image.network(
-                  person.avatarUrl,
-                  width: 48,
-                  height: 48,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    width: 48,
-                    height: 48,
-                    color: Colors.grey.shade300,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-
-              // Nama + relation + tag
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      person.name,
-                      style: tt.titleMedium?.copyWith(
-                        color: nameColor,
-                        fontWeight: FontWeight.w600,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: radius,
+          onTap: onTap,
+          child: Ink(
+            decoration: decoration,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+              child: Row(
+                children: [
+                  // Avatar
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(999),
+                    child: Image.network(
+                      person.avatarUrl,
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Container(
+                        width: 40,
+                        height: 40,
+                        color: Colors.grey.shade300,
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    Row(
+                  ),
+                  const SizedBox(width: 12),
+
+                  // Nama + relation + tag
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Relation chip
-                        RelasiLabel(
-                          label: person.relation,
-                          color: relationColor,
-                          radius: 999,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
+                        Text(
+                          person.name,
+                          style: tt.titleSmall?.copyWith(
+                            color: nameColor,
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        // Tags
-                        Expanded(
-                          child: Wrap(
-                            spacing: 4,
-                            runSpacing: 2,
-                            children: person.tags
-                                .map(
-                                  (t) => Text(
-                                    '#$t',
-                                    style: tt.labelMedium?.copyWith(
-                                      color: tagColor,
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            // Relation chip
+                            RelasiLabel(
+                              label: person.relation,
+                              color: relationColor,
+                              radius: 999,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 2,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            // Tags
+                            Expanded(
+                              child: Wrap(
+                                spacing: 4,
+                                runSpacing: 2,
+                                children: person.tags
+                                    .take(3)
+                                    .map(
+                                      (t) => Text(
+                                        '#$t',
+                                        style: tt.labelMedium?.copyWith(
+                                          color: tagColor,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

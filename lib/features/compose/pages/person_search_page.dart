@@ -22,7 +22,7 @@ class _PersonSearchPageState extends State<PersonSearchPage> {
   String? _filterTag;
 
   // Dummy data sementara
-  final List<PersonOption> _allPersons = const [
+  final List<PersonOption> _allPersons = [
     PersonOption(
       id: '1',
       name: 'Dwimas Nugraha',
@@ -47,6 +47,30 @@ class _PersonSearchPageState extends State<PersonSearchPage> {
       relation: 'Teman',
       tags: ['godek'],
     ),
+    // Additional samples to demonstrate many relations & tags
+    for (int i = 4; i <= 40; i++)
+      PersonOption(
+        id: '$i',
+        name: 'Person $i',
+        avatarUrl:
+            'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg',
+        relation: (i % 5 == 0)
+            ? 'Rekan Kerja'
+            : (i % 4 == 0)
+                ? 'Komunitas'
+                : (i % 3 == 0)
+                    ? 'Partner Bisnis'
+                    : (i % 2 == 0)
+                        ? 'Keluarga'
+                        : 'Teman',
+        tags: [
+          if (i % 2 == 0) 'godek',
+          if (i % 3 == 0) 'travel',
+          if (i % 4 == 0) 'music',
+          if (i % 5 == 0) 'work',
+          'tag$i',
+        ],
+      ),
   ];
 
   List<String> get _availableRelations =>
@@ -125,18 +149,21 @@ class _PersonSearchPageState extends State<PersonSearchPage> {
           ),
           const SizedBox(height: 12),
           Expanded(
-            child: ListView.separated(
-              itemCount: filtered.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 10),
-              itemBuilder: (context, index) {
-                final person = filtered[index];
-                // contoh: setiap item pakai variant outline
-                return PersonListTile(
-                  person: person,
-                  variant: PersonTileVariant.outline,
-                  onTap: () => Get.back(result: person),
-                );
-              },
+            child: ClipRect(
+              child: ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                itemCount: filtered.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                itemBuilder: (context, index) {
+                  final person = filtered[index];
+                  return PersonListTile(
+                    person: person,
+                    variant: PersonTileVariant.outline,
+                    onTap: () => Get.back(result: person),
+                  );
+                },
+              ),
             ),
           ),
         ],

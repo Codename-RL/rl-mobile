@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sapa_mobile/widgets/button/action_button.dart';
 
 enum PersonSortMode { asc, desc }
@@ -21,7 +22,7 @@ Future<PersonFilterResult?> showPersonFilterSheet(
   String? initialRelation,
   String? initialTag,
   List<String> relationOptions = const ['Teman', 'Keluarga', 'Pasangan'],
-  List<String> tagOptions = const ['godek', 'basong'],
+  List<String> tagOptions = const ['godek', 'basong',"haha",'hihi','hehe'],
 }) {
   return showModalBottomSheet<PersonFilterResult>(
     context: context,
@@ -80,10 +81,14 @@ Future<PersonFilterResult?> showPersonFilterSheet(
                           ),
                         ),
                         const SizedBox(height: 20),
-                        Icon(
-                          Icons.filter_alt_rounded,
-                          size: 40,
-                          color: cs.primary,
+                        SvgPicture.asset(
+                          'assets/icon/filter_variant.svg',
+                          width: 40,
+                          height: 40,
+                          colorFilter: ColorFilter.mode(
+                            cs.primary,
+                            BlendMode.srcIn,
+                          ),
                         ),
                         const SizedBox(height: 12),
                         Text(
@@ -105,82 +110,113 @@ Future<PersonFilterResult?> showPersonFilterSheet(
                         const SizedBox(height: 24),
                         Flexible(
                           child: SingleChildScrollView(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _SectionTitle(
-                                  title: 'Urutkan nama',
-                                  subtitle:
-                                      'Atur urutan tampilan daftar kontak.',
-                                ),
-                                Wrap(
-                                  spacing: 12,
-                                  runSpacing: 10,
-                                  children: [
-                                    _FilterChip(
-                                      label: 'A → Z',
-                                      selected: sort == PersonSortMode.asc,
-                                      onTap: () => setState(
-                                          () => sort = PersonSortMode.asc),
-                                    ),
-                                    _FilterChip(
-                                      label: 'Z → A',
-                                      selected: sort == PersonSortMode.desc,
-                                      onTap: () => setState(
-                                          () => sort = PersonSortMode.desc),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 24),
-                                _SectionTitle(
-                                  title: 'Relasi',
-                                  subtitle:
-                                      'Filter berdasarkan hubungan kamu.',
-                                ),
-                                _ChipWrap(
-                                  children: [
-                                    _FilterChip(
-                                      label: 'Semua',
-                                      selected: relation == null,
-                                      onTap: () =>
-                                          setState(() => relation = null),
-                                    ),
-                                    ...relationChoices.map(
-                                      (item) => _FilterChip(
-                                        label: item,
-                                        selected: relation == item,
+                            padding: EdgeInsets.zero,
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _SectionTitle(
+                                    title: 'Urutkan nama',
+                                    subtitle:
+                                        'Atur urutan tampilan daftar kontak.',
+                                  ),
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 4,
+                                    children: [
+                                      _FilterChip(
+                                        label: 'A → Z',
+                                        selected: sort == PersonSortMode.asc,
+                                        onTap: () => setState(
+                                            () => sort = PersonSortMode.asc),
+                                      ),
+                                      _FilterChip(
+                                        label: 'Z → A',
+                                        selected: sort == PersonSortMode.desc,
+                                        onTap: () => setState(
+                                            () => sort = PersonSortMode.desc),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  _SectionTitle(
+                                    title: 'Relasi',
+                                    subtitle:
+                                        'Filter berdasarkan hubungan kamu.',
+                                  ),
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 4,
+                                    children: [
+                                      _FilterChip(
+                                        label: 'Semua',
+                                        selected: relation == null,
                                         onTap: () =>
-                                            setState(() => relation = item),
+                                            setState(() => relation = null),
+                                      ),
+                                      ...relationChoices
+                                          .take(5)
+                                          .map(
+                                            (item) => _FilterChip(
+                                              label: item,
+                                              selected: relation == item,
+                                              onTap: () => setState(
+                                                  () => relation = item),
+                                            ),
+                                          ),
+                                    ],
+                                  ),
+                                  if (relationChoices.length > 5)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4),
+                                      child: Text(
+                                        '+${relationChoices.length - 5} relasi lain tersedia',
+                                        style: tt.bodySmall?.copyWith(
+                                          color: cs.onSurfaceVariant,
+                                        ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(height: 24),
-                                _SectionTitle(
-                                  title: 'Tag',
-                                  subtitle:
-                                      'Pilih tag favorit untuk fokus cepat.',
-                                ),
-                                _ChipWrap(
-                                  children: [
-                                    _FilterChip(
-                                      label: 'Semua',
-                                      selected: tag == null,
-                                      onTap: () =>
-                                          setState(() => tag = null),
-                                    ),
-                                    ...tagChoices.map(
-                                      (item) => _FilterChip(
-                                        label: _formatTagLabel(item),
-                                        selected: tag == item,
+                                  const SizedBox(height: 8),
+                                  _SectionTitle(
+                                    title: 'Tag',
+                                    subtitle:
+                                        'Pilih tag favorit untuk fokus cepat.',
+                                  ),
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 4,
+                                    children: [
+                                      _FilterChip(
+                                        label: 'Semua',
+                                        selected: tag == null,
                                         onTap: () =>
-                                            setState(() => tag = item),
+                                            setState(() => tag = null),
+                                      ),
+                                      ...tagChoices
+                                          .take(5)
+                                          .map(
+                                            (item) => _FilterChip(
+                                              label: _formatTagLabel(item),
+                                              selected: tag == item,
+                                              onTap: () =>
+                                                  setState(() => tag = item),
+                                            ),
+                                          ),
+                                    ],
+                                  ),
+                                  if (tagChoices.length > 5)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4),
+                                      child: Text(
+                                        '+${tagChoices.length - 5} tag lain tersedia',
+                                        style: tt.bodySmall?.copyWith(
+                                          color: cs.onSurfaceVariant,
+                                        ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -281,64 +317,10 @@ class _FilterChip extends StatelessWidget {
       selectedColor: cs.primaryContainer,
       side: BorderSide(color: selected ? cs.primary : cs.outlineVariant),
       labelStyle: TextStyle(
-        color: selected ? cs.onPrimaryContainer : cs.onSurface,
+        color: selected ? cs.primary : cs.onPrimaryContainer,
         fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
       ),
       showCheckmark: false,
-    );
-  }
-}
-
-class _ChipWrap extends StatelessWidget {
-  const _ChipWrap({
-    required this.children,
-    this.scrollThreshold = 10,
-    this.maxHeight = 180,
-  });
-
-  final List<Widget> children;
-  final int scrollThreshold;
-  final double maxHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    final wrap = Wrap(
-      spacing: 12,
-      runSpacing: 10,
-      children: children,
-    );
-    final needsScroll = children.length > scrollThreshold;
-    if (!needsScroll) {
-      return wrap;
-    }
-
-    final cs = Theme.of(context).colorScheme;
-    final tt = Theme.of(context).textTheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: maxHeight,
-          child: Scrollbar(
-            thumbVisibility: true,
-            radius: const Radius.circular(999),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(right: 8),
-              physics: const BouncingScrollPhysics(),
-              child: wrap,
-            ),
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          'Gulir untuk lihat lainnya',
-          style: tt.bodySmall?.copyWith(
-            color: cs.secondary,
-            fontStyle: FontStyle.italic,
-          ),
-        ),
-      ],
     );
   }
 }
@@ -357,7 +339,7 @@ class _SectionTitle extends StatelessWidget {
     final tt = Theme.of(context).textTheme;
     final cs = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

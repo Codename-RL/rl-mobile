@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:sapa_mobile/features/compose/pages/person_search_page.dart';
 
 
-import '../person/person_list_tile.dart';
+import 'person_list_tile.dart';
 
 class ComposePersonPickerButton extends StatelessWidget {
   const ComposePersonPickerButton({
@@ -22,9 +22,9 @@ class ComposePersonPickerButton extends StatelessWidget {
     final tt = Theme.of(context).textTheme;
 
     return SizedBox(
-      height: 56,
+      height: 46,
       child: InkWell(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(16),
         onTap: () async {
           final result = await Get.to<PersonOption?>(
             () => const PersonSearchPage(),
@@ -36,7 +36,7 @@ class ComposePersonPickerButton extends StatelessWidget {
         child: Ink(
           decoration: BoxDecoration(
             color: cs.primary.withAlpha(15),
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: cs.primary.withAlpha(80),
               width: 1.4,
@@ -67,9 +67,11 @@ class ComposePersonPickerButton extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 selectedPerson?.name ?? 'Pilih orang',
-                style: tt.titleMedium?.copyWith(
-                  color: cs.primary,
-                  fontWeight: FontWeight.w600,
+                style: tt.titleSmall?.copyWith(
+                  color: selectedPerson == null
+                      ? cs.onSurface.withAlpha(120)
+                      : cs.primary,
+
                 ),
               ),
             ],
