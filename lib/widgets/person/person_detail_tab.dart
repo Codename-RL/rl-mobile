@@ -54,10 +54,10 @@ class PersonDetailTabs extends StatelessWidget {
               color: cs.surface,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withAlpha(12),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                )
+                  color: Colors.black.withAlpha(50),
+                  blurRadius: 12,
+                  offset: const Offset(0, 10),
+                ),
               ],
             ),
           ),
@@ -89,22 +89,22 @@ class _TabItem extends StatelessWidget {
       onTap: () => onTap(index),
       borderRadius: BorderRadius.circular(999),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 10, 12, 8),
+        padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               label,
-              style: tt.titleMedium?.copyWith(
-                color: isActive ? cs.primary : cs.primary.withAlpha(150),
-                fontWeight: FontWeight.w600,
+              style: tt.titleSmall?.copyWith(
+                color: isActive ? cs.primary : cs.onSurface.withAlpha(100),
+                fontWeight: FontWeight.w400,
               ),
             ),
             const SizedBox(height: 6),
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               curve: Curves.easeOut,
-              width: 72,
+              width: 100,
               height: 4,
               decoration: BoxDecoration(
                 color: isActive ? cs.primary : Colors.transparent,

@@ -1,6 +1,7 @@
 // lib/features/people/pages.dart
 import 'dart:ui';
 
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sapa_mobile/widgets/button/circle_icon_button.dart';
 import 'package:sapa_mobile/widgets/person/person_top_profile.dart';
@@ -45,6 +46,7 @@ final peoplePages = <GetPage>[
         ),
         hero: hero,
         heroHeight: PersonTopProfile.estimateHeight(dummyTags),
+        padding: EdgeInsets.zero,
         body: PersonDetailPage(
           id: id,
           name: dummyName,

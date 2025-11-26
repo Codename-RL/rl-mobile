@@ -32,6 +32,14 @@ class ProfileScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final content = Padding(padding: padding, child: body);
+    final double topInset = MediaQuery.of(context).padding.top;
+    const double headerBlockHeight = 12 + 44 + 8; // padding + header box
+
+    double heroSpacer = 0;
+    if (hero != null) {
+      heroSpacer = heroHeight - headerBlockHeight - topInset;
+      if (heroSpacer < 0) heroSpacer = 0;
+    }
 
     return Scaffold(
       backgroundColor: cs.surface,
@@ -82,7 +90,8 @@ class ProfileScaffold extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (hero != null) SizedBox(height: heroHeight),
+                if (hero != null && heroSpacer > 0)
+                  SizedBox(height: heroSpacer),
                 Expanded(
                   child: scrollable
                       ? SingleChildScrollView(child: content)

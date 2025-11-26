@@ -18,7 +18,7 @@ class PersonTopProfile extends StatelessWidget {
 
   /// Perkiraan tinggi berdasarkan jumlah tag
   static double estimateHeight(List<String> tags) {
-    const double base = 320; // avatar + nama tanpa tag
+    const double base = 310; // avatar + nama tanpa tag
     if (tags.isEmpty) return base;
 
     // asumsi max 3 tag per baris
@@ -39,84 +39,86 @@ class PersonTopProfile extends StatelessWidget {
         children: [
           const Positioned.fill(child: BgBubbles()),
 
-          // konten di tengah, sedikit turun dari atas
+          // konten dirapatkan ke bawah supaya langsung menyambung ke tab
           Align(
-            alignment: const Alignment(0, 0.2),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 100),
-                Container(
-                  width: 92,
-                  height: 92,
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 60, 0, 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 92,
+                    height: 92,
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: cs.surface,
+                        width: 0,
+                      ),
                       color: cs.surface,
-                      width: 0,
                     ),
-                    color: cs.surface,
+                    child: CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.white.withAlpha(60),
+                      backgroundImage: (photoUrl == null || photoUrl!.isEmpty)
+                          ? null
+                          : NetworkImage(photoUrl!),
+                      child: (photoUrl == null || photoUrl!.isEmpty)
+                          ? Text(
+                              name.isNotEmpty ? name[0].toUpperCase() : '?',
+                              style: tt.headlineSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                          : null,
+                    ),
                   ),
-                  child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.white.withAlpha(60),
-                    backgroundImage: (photoUrl == null || photoUrl!.isEmpty)
-                        ? null
-                        : NetworkImage(photoUrl!),
-                    child: (photoUrl == null || photoUrl!.isEmpty)
-                        ? Text(
-                            name.isNotEmpty ? name[0].toUpperCase() : '?',
-                            style: tt.headlineSmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                  const SizedBox(height: 12),
+                  Text(
+                    name,
+                    style: tt.titleLarge?.copyWith(
+                      color: cs.surface,
+                      // fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  if (tags.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 8,
+                      runSpacing: 6,
+                      children: tags
+                          .map(
+                            (t) => Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: cs.primary.withAlpha(40),
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(
+                                  color: cs.primary.withAlpha(115),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(
+                                '#$t',
+                                style: tt.labelMedium?.copyWith(
+                                  color: cs.primary,
+                                ),
+                              ),
                             ),
                           )
-                        : null,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  name,
-                  style: tt.titleLarge?.copyWith(
-                    color: cs.surface,
-                    // fontWeight: FontWeight.w700,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                if (tags.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 8,
-                    runSpacing: 6,
-                    children: tags
-                        .map(
-                          (t) => Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: cs.primary.withAlpha(40),
-                              borderRadius: BorderRadius.circular(999),
-                              border: Border.all(
-                                color: cs.primary.withAlpha(115),
-                                width: 1,
-                              ),
-                            ),
-                            child: Text(
-                              '#$t',
-                              style: tt.labelMedium?.copyWith(
-                                color: cs.primary,
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
+                          .toList(),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ],
