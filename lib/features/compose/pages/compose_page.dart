@@ -1,10 +1,14 @@
 // lib/modules/compose/pages/compose_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:sapa_mobile/features/compose/pages/tag_picker_page.dart';
 
 import 'package:sapa_mobile/widgets/form/journal_image_picker.dart';
 import 'package:sapa_mobile/widgets/form/location_picker_button.dart';
 import 'package:sapa_mobile/widgets/post/compose_location_label.dart';
+
+import 'package:sapa_mobile/widgets/tag/tag_chip.dart';
 
 class ComposePage extends StatefulWidget {
   const ComposePage({super.key});
@@ -18,6 +22,7 @@ class _ComposePageState extends State<ComposePage> {
   final _imagePickerKey = GlobalKey<ComposeImagePickerState>();
 
   String? _locationName;
+  List<String> _selectedTags = []; // <<--- TAG STATE
 
   @override
   void dispose() {
@@ -104,6 +109,18 @@ class _ComposePageState extends State<ComposePage> {
 
                 const SizedBox(height: 8),
 
+                // --- TAG CHIP DI BAWAH TEKS ---
+                if (_selectedTags.isNotEmpty) ...[
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 6,
+                    children: _selectedTags
+                        .map((t) => TagChip(label: t))
+                        .toList(),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+
                 // --- PREVIEW GAMBAR ---
                 ComposeImagePicker(
                   key: _imagePickerKey,
@@ -128,6 +145,7 @@ class _ComposePageState extends State<ComposePage> {
             ),
             child: Row(
               children: [
+                // Gambar
                 Expanded(
                   child: _ToolButton(
                     iconAsset: 'assets/icon/picture.svg',
@@ -138,6 +156,8 @@ class _ComposePageState extends State<ComposePage> {
                   ),
                 ),
                 const SizedBox(width: 8),
+
+                // Lokasi
                 Expanded(
                   child: ComposeLocationPickerButton(
                     onLocationSelected: (val) {
@@ -146,12 +166,24 @@ class _ComposePageState extends State<ComposePage> {
                   ),
                 ),
                 const SizedBox(width: 8),
+
+                // Tag
                 Expanded(
                   child: _ToolButton(
                     iconAsset: 'assets/icon/tag.svg',
                     label: 'Tag',
-                    onTap: () {
-                      // TODO: buka picker tag
+                    onTap: () async {
+                      final result = await Get.to<List<String>>(
+                        () => TagPickerPage(
+                          initialSelected: _selectedTags,
+                        ),
+                      );
+
+                      if (result != null) {
+                        setState(() {
+                          _selectedTags = result;
+                        });
+                      }
                     },
                   ),
                 ),
@@ -195,12 +227,11 @@ class _ToolButton extends StatelessWidget {
                 height: 26,
                 colorFilter: ColorFilter.mode(cs.primary, BlendMode.srcIn),
               ),
-              const SizedBox(width: 6),
+              const SizedBox(width: 8),
               Text(
                 label,
                 style: tt.titleSmall?.copyWith(
                   color: cs.primary,
-                  // fontWeight: FontWeight.w600,
                 ),
               ),
             ],
