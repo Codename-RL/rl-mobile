@@ -19,11 +19,22 @@ void showJournalReminderSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (_) => JournalReminderSheet(
-      initialDateTime: initialDateTime,
-      initialRepeat: initialRepeat,
-      onSubmit: onSubmit,
-      onDelete: onDelete,
+    builder: (sheetContext) => Stack(
+      children: [
+        Positioned.fill(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => Navigator.of(sheetContext).maybePop(),
+            child: const SizedBox.expand(),
+          ),
+        ),
+        JournalReminderSheet(
+          initialDateTime: initialDateTime,
+          initialRepeat: initialRepeat,
+          onSubmit: onSubmit,
+          onDelete: onDelete,
+        ),
+      ],
     ),
   );
 }

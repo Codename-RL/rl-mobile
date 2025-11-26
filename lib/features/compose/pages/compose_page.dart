@@ -6,6 +6,8 @@ import 'package:sapa_mobile/features/compose/pages/tag_picker_page.dart';
 
 import 'package:sapa_mobile/widgets/form/journal_image_picker.dart';
 import 'package:sapa_mobile/widgets/form/location_picker_button.dart';
+import 'package:sapa_mobile/widgets/form/person_picker_button.dart';
+import 'package:sapa_mobile/widgets/person/person_list_tile.dart';
 import 'package:sapa_mobile/widgets/post/compose_location_label.dart';
 
 import 'package:sapa_mobile/widgets/tag/tag_chip.dart';
@@ -20,6 +22,7 @@ class ComposePage extends StatefulWidget {
 class _ComposePageState extends State<ComposePage> {
   final TextEditingController _contentC = TextEditingController();
   final _imagePickerKey = GlobalKey<ComposeImagePickerState>();
+  PersonOption? _selectedPerson;  
 
   String? _locationName;
   List<String> _selectedTags = []; // <<--- TAG STATE
@@ -47,39 +50,11 @@ class _ComposePageState extends State<ComposePage> {
                 const SizedBox(height: 12),
 
                 // --- PILIH ORANG (dummy dulu) ---
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: cs.primary.withAlpha(15),
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: cs.primary.withAlpha(80),
-                      width: 1.4,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(999),
-                        child: Container(
-                          width: 38,
-                          height: 38,
-                          color: cs.primary.withAlpha(80),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        'Dwimas',
-                        style: tt.titleMedium?.copyWith(
-                          color: cs.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
+                ComposePersonPickerButton(
+                  selectedPerson: _selectedPerson,
+                  onPersonSelected: (person) {
+                    setState(() => _selectedPerson = person);
+                  },
                 ),
 
                 // --- LABEL LOKASI DI BAWAH ORANG ---
