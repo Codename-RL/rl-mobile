@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sapa_mobile/widgets/scaffold/form_scaffold.dart';
+import 'package:sapa_mobile/widgets/form/search_bar.dart';
 
 class LocationSearchPage extends StatefulWidget {
   const LocationSearchPage({super.key});
@@ -82,9 +83,10 @@ class _LocationSearchPageState extends State<LocationSearchPage> {
 
       final List preds = data['predictions'] as List;
       setState(() {
-        _predictions = preds
-            .map((e) => PlacePrediction.fromJson(e as Map<String, dynamic>))
-            .toList();
+        _predictions =
+            preds
+                .map((e) => PlacePrediction.fromJson(e as Map<String, dynamic>))
+                .toList();
       });
     } catch (e) {
       // TODO: bisa tampilkan snackbar/log
@@ -106,87 +108,52 @@ class _LocationSearchPageState extends State<LocationSearchPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 8),
-          Text(
-            'Pilih lokasi untuk ditandai',
-            style: tt.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: cs.onSurface,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Orang yang Anda bagikan jurnal ini bisa melihat lokasi yang Anda tandai.',
-            style: tt.bodySmall?.copyWith(
-              color: cs.onSurface.withAlpha(160),
-            ),
-          ),
-          const SizedBox(height: 12),
+          
 
-          // Search bar
-          TextField(
+          AppSearchBar(
             controller: _searchC,
+            hintText: 'Cari lokasi...',
             onChanged: _onQueryChanged,
-            autofocus: true,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search_rounded),
-              hintText: 'Cari lokasi...',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999),
-                borderSide: BorderSide(
-                  color: cs.outline.withAlpha(120),
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999),
-                borderSide: BorderSide(
-                  color: cs.primary,
-                  width: 1.6,
-                ),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-            ),
+            showFilter: false, // belum pakai filter di halaman ini
           ),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
 
           // List hasil Google Places
           Expanded(
-            child: _isLoading && _predictions.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : ListView.separated(
-                    itemCount: _predictions.length,
-                    separatorBuilder: (_, __) => const Divider(height: 1),
-                    itemBuilder: (context, index) {
-                      final p = _predictions[index];
-                      final mainText = p.mainText ?? p.description;
-                      final secondaryText = p.secondaryText;
+            child:
+                _isLoading && _predictions.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView.separated(
+                      itemCount: _predictions.length,
+                      separatorBuilder: (_, __) => const Divider(height: 1),
+                      itemBuilder: (context, index) {
+                        final p = _predictions[index];
+                        final mainText = p.mainText ?? p.description;
+                        final secondaryText = p.secondaryText;
 
-                      return ListTile(
-                        onTap: () {
-                          // Untuk sekarang kita kirim label string saja
-                          Get.back(result: p.description);
-                          // Kalau nanti mau simpan placeId juga,
-                          // kamu bisa kirim objek kecil, bukan String.
-                        },
-                        title: Text(
-                          mainText,
-                          style: tt.bodyMedium?.copyWith(
-                            color: cs.onSurface,
+                        return ListTile(
+                          onTap: () {
+                            // Untuk sekarang kita kirim label string saja
+                            Get.back(result: p.description);
+                            // Kalau nanti mau simpan placeId juga,
+                            // kamu bisa kirim objek kecil, bukan String.
+                          },
+                          title: Text(
+                            mainText,
+                            style: tt.bodyMedium?.copyWith(color: cs.onSurface),
                           ),
-                        ),
-                        subtitle: secondaryText == null
-                            ? null
-                            : Text(
-                                secondaryText,
-                                style: tt.bodySmall?.copyWith(
-                                  color: cs.onSurface.withAlpha(150),
-                                ),
-                              ),
-                      );
-                    },
-                  ),
+                          subtitle:
+                              secondaryText == null
+                                  ? null
+                                  : Text(
+                                    secondaryText,
+                                    style: tt.bodySmall?.copyWith(
+                                      color: cs.onSurface.withAlpha(150),
+                                    ),
+                                  ),
+                        );
+                      },
+                    ),
           ),
         ],
       ),
