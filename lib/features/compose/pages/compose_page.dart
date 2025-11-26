@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 import 'package:sapa_mobile/widgets/form/journal_image_picker.dart';
 import 'package:sapa_mobile/widgets/form/location_picker_button.dart';
 import 'package:sapa_mobile/widgets/post/compose_location_label.dart';
@@ -44,8 +43,10 @@ class _ComposePageState extends State<ComposePage> {
 
                 // --- PILIH ORANG (dummy dulu) ---
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: cs.primary.withAlpha(15),
                     borderRadius: BorderRadius.circular(24),
@@ -76,10 +77,9 @@ class _ComposePageState extends State<ComposePage> {
                   ),
                 ),
 
-                const SizedBox(height: 8),
-
                 // --- LABEL LOKASI DI BAWAH ORANG ---
                 if (_locationName != null) ...[
+                  const SizedBox(height: 8),
                   ComposeLocationLabel(
                     text: _locationName!,
                     onClear: () => setState(() => _locationName = null),
@@ -95,11 +95,11 @@ class _ComposePageState extends State<ComposePage> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Apa yang anda pikirkan?',
-                    hintStyle: tt.titleMedium?.copyWith(
+                    hintStyle: tt.bodyLarge?.copyWith(
                       color: cs.onSurface.withAlpha(80),
                     ),
                   ),
-                  style: tt.titleMedium?.copyWith(color: cs.onSurface),
+                  style: tt.bodyLarge?.copyWith(color: cs.onSurface),
                 ),
 
                 const SizedBox(height: 8),
@@ -120,8 +120,12 @@ class _ComposePageState extends State<ComposePage> {
         SafeArea(
           top: false,
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 0, right: 0, top: 4, bottom: 8),
+            padding: const EdgeInsets.only(
+              left: 0,
+              right: 0,
+              top: 4,
+              bottom: 8,
+            ),
             child: Row(
               children: [
                 Expanded(
@@ -161,11 +165,7 @@ class _ComposePageState extends State<ComposePage> {
 }
 
 class _ToolButton extends StatelessWidget {
-  const _ToolButton({
-    required this.iconAsset,
-    required this.label,
-    this.onTap,
-  });
+  const _ToolButton({required this.iconAsset, required this.label, this.onTap});
 
   final String iconAsset;
   final String label;
