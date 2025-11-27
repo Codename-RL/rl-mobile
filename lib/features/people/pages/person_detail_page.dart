@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sapa_mobile/widgets/button/square_icon_button.dart';
 import 'package:sapa_mobile/widgets/person/person_detail_tab.dart';
 import 'package:sapa_mobile/widgets/person/person_info_tab.dart';
+import 'package:sapa_mobile/widgets/person/person_timeline_tab.dart';
 import 'package:sapa_mobile/widgets/post/post_card.dart';
 
 class PersonDetailPage extends StatefulWidget {
@@ -120,20 +121,33 @@ class _PersonDetailPageState extends State<PersonDetailPage> {
           birthDate: '17 Agustus 1945',
           importantDates: const ['17 Agustus 1945'],
           phones: const ['+628361274863284', '+628361274863284'],
-          emails: const [
-            'muhammaddwimas@gmail.com',
-            'dwimas.work@example.com',
-          ],
+          emails: const ['muhammaddwimas@gmail.com', 'dwimas.work@example.com'],
           socials: const [
             '@dimasngr_', // akan dianggap instagram
             'https://instagram.com/dimasngr_',
           ],
         );
       case 2:
-        return Text(
-          'Linimasa interaksi akan ditampilkan di sini.',
-          style: tt.bodyLarge,
-        );
+        final timelineItems = [
+          PersonTimelineItem(
+            title: 'Membuat jurnal "Lore, Ipsum……"',
+            createdAt: DateTime.now().subtract(const Duration(minutes: 5)),
+          ),
+          PersonTimelineItem(
+            title: 'Memberi emosi ke jurnal "Lore……"',
+            createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
+          ),
+          PersonTimelineItem(
+            title: 'Menambah email baru',
+            createdAt: DateTime.now().subtract(const Duration(hours: 3)),
+          ),
+          PersonTimelineItem(
+            title: 'Membuat jurnal "Lore, Ipsum……"',
+            createdAt: DateTime(2025, 1, 12, 14, 30),
+          ),
+        ];
+
+        return PersonTimelineTab(items: timelineItems);
       default:
         return const SizedBox.shrink();
     }
