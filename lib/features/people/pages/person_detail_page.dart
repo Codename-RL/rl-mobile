@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sapa_mobile/widgets/button/square_icon_button.dart';
 import 'package:sapa_mobile/widgets/person/person_detail_tab.dart';
+import 'package:sapa_mobile/widgets/person/person_info_tab.dart';
 import 'package:sapa_mobile/widgets/post/post_card.dart';
 
 class PersonDetailPage extends StatefulWidget {
@@ -111,9 +112,22 @@ class _PersonDetailPageState extends State<PersonDetailPage> {
       case 0:
         return _buildJournalTab(theme);
       case 1:
-        return Text(
-          'Informasi dasar ${widget.name} (ID: ${widget.id}).',
-          style: tt.bodyLarge,
+        return PersonInfoTab(
+          firstName: 'Muhammad Dwimas',
+          lastName: 'Catur Nugraha',
+          nickname: 'Dwimas',
+          about: 'Lorem Ipsum sdaun... (isi bio lengkap di sini)',
+          birthDate: '17 Agustus 1945',
+          importantDates: const ['17 Agustus 1945'],
+          phones: const ['+628361274863284', '+628361274863284'],
+          emails: const [
+            'muhammaddwimas@gmail.com',
+            'dwimas.work@example.com',
+          ],
+          socials: const [
+            '@dimasngr_', // akan dianggap instagram
+            'https://instagram.com/dimasngr_',
+          ],
         );
       case 2:
         return Text(
@@ -131,10 +145,7 @@ class _PersonDetailPageState extends State<PersonDetailPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        PersonDetailTabs(
-          currentIndex: _currentTab,
-          onChanged: _onTabChanged,
-        ),
+        PersonDetailTabs(currentIndex: _currentTab, onChanged: _onTabChanged),
         Expanded(
           child: SingleChildScrollView(
             child: Padding(
