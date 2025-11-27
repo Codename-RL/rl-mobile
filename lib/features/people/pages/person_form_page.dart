@@ -2,8 +2,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:intl/intl.dart';
+import 'package:sapa_mobile/widgets/button/action_button.dart';
+import 'package:sapa_mobile/widgets/form/date_time_picker.dart';
+import 'package:sapa_mobile/widgets/form/text_field.dart';
 import 'package:sapa_mobile/widgets/scaffold/form_scaffold.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import '../../../widgets/person/profile_photo_picker.dart';
@@ -45,7 +48,6 @@ class _PersonFormPageState extends State<PersonFormPage> {
   late final TextEditingController _phoneCtrl;
   late final TextEditingController _emailCtrl;
   late final TextEditingController _tagsCtrl;
-  late final TextEditingController _birthDateCtrl;
   DateTime? _birthDate;
   Uint8List? _profileImageBytes;
   AssetEntity? _selectedAvatarAsset;
@@ -63,9 +65,6 @@ class _PersonFormPageState extends State<PersonFormPage> {
     _emailCtrl = TextEditingController(text: widget.initialEmail ?? '');
     _tagsCtrl = TextEditingController(text: widget.initialTags ?? '');
     _birthDate = widget.initialBirthDate;
-    _birthDateCtrl = TextEditingController(
-      text: _birthDate == null ? '' : _formatDate(_birthDate!),
-    );
   }
 
   @override
@@ -77,7 +76,6 @@ class _PersonFormPageState extends State<PersonFormPage> {
     _phoneCtrl.dispose();
     _emailCtrl.dispose();
     _tagsCtrl.dispose();
-    _birthDateCtrl.dispose();
     super.dispose();
   }
 
@@ -95,14 +93,20 @@ class _PersonFormPageState extends State<PersonFormPage> {
       locale: const Locale('id', 'ID'),
     );
     if (picked != null) {
-      setState(() {
-        _birthDate = picked;
-        _birthDateCtrl.text = _formatDate(picked);
-      });
+      setState(() => _birthDate = picked);
     }
   }
 
   void _submit() {
+    FocusScope.of(context).unfocus();
+    if (_firstNameCtrl.text.trim().isEmpty) {
+      Get.snackbar(
+        'Form belum lengkap',
+        'Nama depan wajib diisi',
+        snackPosition: SnackPosition.TOP,
+      );
+      return;
+    }
     if (!_formKey.currentState!.validate()) return;
     Get.back(result: {
       'firstName': _firstNameCtrl.text.trim(),
@@ -176,9 +180,12 @@ class _PersonFormPageState extends State<PersonFormPage> {
   Widget build(BuildContext context) {
     return FormScaffold(
       title: widget.isEdit ? 'Sunting Profil' : 'Tambah Orang',
-      action: TextButton(
+      action: ActionButton(
+        label: widget.isEdit ? 'Simpan' : 'Tambah',
         onPressed: _submit,
-        child: const Text('Simpan'),
+        height: 40,
+        radius: 20,
+        showShadow: true,
       ),
       scrollable: true,
       body: Form(
@@ -196,27 +203,49 @@ class _PersonFormPageState extends State<PersonFormPage> {
             const SizedBox(height: 24),
             _SectionLabel(title: 'Informasi Dasar'),
             const SizedBox(height: 12),
-            _buildField(
+            AppTextField(
               label: 'Nama Depan',
               controller: _firstNameCtrl,
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Wajib isi' : null,
+              type: AppTextFieldType.text,
+              textInputAction: TextInputAction.next,
+              hintText: 'Masukkan nama depan',
             ),
             const SizedBox(height: 12),
-            _buildField(
+            AppTextField(
               label: 'Nama Belakang',
               controller: _lastNameCtrl,
+              type: AppTextFieldType.text,
+              isRequired: false,
+              hintText: 'Masukkan nama belakang',
             ),
             const SizedBox(height: 12),
-            _buildField(
+            AppTextField(
               label: 'Nama Panggilan',
               controller: _nicknameCtrl,
+              type: AppTextFieldType.text,
+              isRequired: false,
+              hintText: 'Masukkan nama panggilan',
             ),
             const SizedBox(height: 12),
-            _buildField(
+            AppTextArea(
               label: 'Tentang',
               controller: _aboutCtrl,
-              maxLines: 4,
+              hintText: 'Ceritakan sedikit tentang orang ini',
+              minLines: 4,
+              maxLines: 6,
+            ),
+            const SizedBox(height: 12),
+            GestureDetector(
+              onTap: _pickBirthDate,
+              child: AbsorbPointer(
+                child: DateTimePicker(
+                  label: 'Tanggal Lahir',
+                  placeholder: _birthDate == null
+                      ? 'Pilih tanggal'
+                      : _formatDate(_birthDate!),
+                  allowTime: false,
+                ),
+              ),
             ),
             const SizedBox(height: 24),
             _SectionLabel(title: 'Kontak'),
@@ -234,17 +263,6 @@ class _PersonFormPageState extends State<PersonFormPage> {
             ),
             const SizedBox(height: 24),
             _SectionLabel(title: 'Detail Lain'),
-            const SizedBox(height: 12),
-            GestureDetector(
-              onTap: _pickBirthDate,
-              child: AbsorbPointer(
-                child: _buildField(
-                  label: 'Tanggal Lahir',
-                  controller: _birthDateCtrl,
-                  hintText: 'Pilih tanggal',
-                ),
-              ),
-            ),
             const SizedBox(height: 12),
             _buildField(
               label: 'Tag (pisahkan dengan koma)',
@@ -276,7 +294,7 @@ class _PersonFormPageState extends State<PersonFormPage> {
         labelText: label,
         hintText: hintText,
         filled: true,
-        fillColor: cs.surfaceVariant.withAlpha(30),
+        fillColor: cs.surfaceContainerHighest.withAlpha(30),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
         ),

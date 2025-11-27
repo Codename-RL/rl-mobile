@@ -1,5 +1,6 @@
 // app.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'core/app_theme.dart';
 import 'routes/app_pages.dart';
@@ -13,12 +14,15 @@ class SapaApp extends StatelessWidget {
       title: 'SAPA',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system,
-      // initialRoute: '/',   // TabShell as entry
-      initialRoute: '/',   // TabShell as entry
+      themeMode: ThemeMode.light,
+      initialRoute: '/', // TabShell as entry
       getPages: AppPages.pages,
       defaultTransition: Transition.noTransition, // tab tak animasi route
-      
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      supportedLocales: const [
+        Locale('en'),
+        Locale('id', 'ID'),
+      ],
     );
   }
 }

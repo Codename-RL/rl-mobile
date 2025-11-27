@@ -14,6 +14,7 @@ class AppTextField extends StatefulWidget {
     this.enabled = true,
     this.onChanged,
     this.textInputAction = TextInputAction.next,
+    this.isRequired = true,
   });
 
   final String label;
@@ -24,6 +25,7 @@ class AppTextField extends StatefulWidget {
   final bool enabled;
   final ValueChanged<String>? onChanged;
   final TextInputAction textInputAction;
+  final bool isRequired;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -44,19 +46,25 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 
   void _validate(String v) {
+    final trimmed = v.trim();
+    if (!widget.isRequired && trimmed.isEmpty) {
+      setState(() => _error = null);
+      return;
+    }
+
     String? err;
     switch (widget.type) {
       case AppTextFieldType.text:
-        err = v.trim().isEmpty ? 'Wajib diisi' : null;
+        err = trimmed.isEmpty ? 'Wajib diisi' : null;
         break;
       case AppTextFieldType.email:
-        if (v.trim().isEmpty) {
+        if (trimmed.isEmpty) {
           err = 'Wajib diisi';
         } else {
           final ok = RegExp(
             r"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$",
             caseSensitive: false,
-          ).hasMatch(v.trim());
+          ).hasMatch(trimmed);
           err = ok ? null : 'Email tidak valid';
         }
         break;
@@ -186,6 +194,86 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
 
         // Error di kanan bawah field
+      ],
+    );
+  }
+}
+
+class AppTextArea extends StatelessWidget {
+  const AppTextArea({
+    super.key,
+    required this.label,
+    this.controller,
+    this.hintText,
+    this.minLines = 3,
+    this.maxLines = 6,
+    this.enabled = true,
+    this.onChanged,
+  });
+
+  final String label;
+  final TextEditingController? controller;
+  final String? hintText;
+  final int minLines;
+  final int maxLines;
+  final bool enabled;
+  final ValueChanged<String>? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+
+    final radius = BorderRadius.circular(16);
+    final border = OutlineInputBorder(
+      borderRadius: radius,
+      borderSide: BorderSide(
+        color: cs.onPrimaryContainer.withAlpha(90),
+        width: 1.4,
+      ),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          label,
+          style: tt.labelLarge?.copyWith(
+            color: cs.onPrimaryContainer,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 4),
+        TextField(
+          controller: controller,
+          enabled: enabled,
+          minLines: minLines,
+          maxLines: maxLines,
+          textInputAction: TextInputAction.newline,
+          keyboardType: TextInputType.multiline,
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: tt.labelLarge?.copyWith(
+              color: cs.onSurface.withAlpha(80),
+            ),
+            filled: true,
+            fillColor: cs.primary.withAlpha(20),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 18,
+              vertical: 15,
+            ),
+            enabledBorder: border,
+            focusedBorder: border.copyWith(
+              borderSide: BorderSide(
+                color: cs.secondary.withAlpha(150),
+                width: 2,
+              ),
+            ),
+            disabledBorder: border,
+          ),
+          style: tt.labelLarge?.copyWith(color: cs.onSurface.withAlpha(200)),
+        ),
       ],
     );
   }
