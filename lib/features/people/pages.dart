@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sapa_mobile/widgets/button/circle_icon_button.dart';
 import 'package:sapa_mobile/widgets/person/person_top_profile.dart';
+import 'package:sapa_mobile/widgets/person/profile_options_sheet.dart';
 import 'package:sapa_mobile/widgets/scaffold/profile_scaffold.dart';
 import 'routes.dart';
 import 'pages/people_page.dart';
@@ -37,12 +38,14 @@ final peoplePages = <GetPage>[
       return ProfileScaffold(
         label: 'Teman',
         color: const Color(0xFF2E7D32),
-        action: CircleButton(
-          iconAsset: 'assets/icon/three_dots.svg',
-          variant: CircleBtnVariant.filled,
-          size: 40,
-          iconSize: 20,
-          onTap: () {},
+        action: Builder(
+          builder: (context) => CircleButton(
+            iconAsset: 'assets/icon/three_dots.svg',
+            variant: CircleBtnVariant.filled,
+            size: 40,
+            iconSize: 20,
+            onTap: () => showProfileOptionsSheet(context),
+          ),
         ),
         hero: hero,
         heroHeight: PersonTopProfile.estimateHeight(dummyTags),
