@@ -4,9 +4,11 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sapa_mobile/features/compose/pages/tag_picker_page.dart';
+import 'package:sapa_mobile/features/people/pages/relation_manage_page.dart';
 import 'package:sapa_mobile/widgets/button/circle_icon_button.dart';
 import 'package:sapa_mobile/widgets/person/person_top_profile.dart';
 import 'package:sapa_mobile/widgets/person/profile_options_sheet.dart';
+import 'package:sapa_mobile/widgets/person/relation_create_bottom_sheet.dart';
 import 'package:sapa_mobile/widgets/scaffold/profile_scaffold.dart';
 import 'routes.dart';
 import 'pages/people_page.dart';
@@ -75,6 +77,23 @@ final peoplePages = <GetPage>[
                   );
                 }
               },
+              onManageRelations: () async {
+                final result = await Get.to<RelationOption?>(
+                  () => RelationManagePage(
+                    initialSelected: RelationOption(
+                      name: dummyTags.first,
+                      color: const Color(0xFF42A5F5),
+                    ),
+                  ),
+                );
+                if (result != null) {
+                  Get.snackbar(
+                    'Relasi diperbarui',
+                    result.name,
+                    snackPosition: SnackPosition.BOTTOM,
+                  );
+                }
+              },
             ),
           ),
         ),
@@ -113,5 +132,10 @@ final peoplePages = <GetPage>[
                 : null,
       );
     },
+  ),
+  GetPage(
+    name: PeopleRoutes.relations,
+    transition: Transition.cupertino,
+    page: () => const RelationManagePage(),
   ),
 ];

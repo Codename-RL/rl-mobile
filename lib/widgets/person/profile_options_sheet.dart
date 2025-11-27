@@ -8,6 +8,7 @@ Future<void> showProfileOptionsSheet(
   VoidCallback? onArchive,
   VoidCallback? onDelete,
   VoidCallback? onManageTags,
+  VoidCallback? onManageRelations,
 }) {
   return showModalBottomSheet(
     context: context,
@@ -27,6 +28,7 @@ Future<void> showProfileOptionsSheet(
           onArchive: onArchive,
           onDelete: onDelete,
           onManageTags: onManageTags,
+          onManageRelations: onManageRelations,
         ),
       ],
     ),
@@ -40,12 +42,14 @@ class ProfileOptionsSheet extends StatelessWidget {
     this.onArchive,
     this.onDelete,
     this.onManageTags,
+    this.onManageRelations,
   });
 
   final VoidCallback? onEdit;
   final VoidCallback? onArchive;
   final VoidCallback? onDelete;
   final VoidCallback? onManageTags;
+  final VoidCallback? onManageRelations;
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +99,13 @@ class ProfileOptionsSheet extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).pop();
                       onManageTags?.call();
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  ManageRelationOption(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      onManageRelations?.call();
                     },
                   ),
                   const SizedBox(height: 12),
@@ -183,6 +194,23 @@ class ManageTagOption extends StatelessWidget {
     return _ProfileOptionTile(
       iconAsset: 'assets/icon/tag_stroke.svg',
       label: 'Kelola Tag',
+      color: cs.primary,
+      onTap: onTap,
+    );
+  }
+}
+
+class ManageRelationOption extends StatelessWidget {
+  const ManageRelationOption({super.key, this.onTap});
+
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return _ProfileOptionTile(
+      iconAsset: 'assets/icon/link.svg',
+      label: 'Kelola Relasi',
       color: cs.primary,
       onTap: onTap,
     );
