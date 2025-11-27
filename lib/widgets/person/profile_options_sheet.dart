@@ -7,6 +7,7 @@ Future<void> showProfileOptionsSheet(
   VoidCallback? onEdit,
   VoidCallback? onArchive,
   VoidCallback? onDelete,
+  VoidCallback? onManageTags,
 }) {
   return showModalBottomSheet(
     context: context,
@@ -25,6 +26,7 @@ Future<void> showProfileOptionsSheet(
           onEdit: onEdit,
           onArchive: onArchive,
           onDelete: onDelete,
+          onManageTags: onManageTags,
         ),
       ],
     ),
@@ -37,11 +39,13 @@ class ProfileOptionsSheet extends StatelessWidget {
     this.onEdit,
     this.onArchive,
     this.onDelete,
+    this.onManageTags,
   });
 
   final VoidCallback? onEdit;
   final VoidCallback? onArchive;
   final VoidCallback? onDelete;
+  final VoidCallback? onManageTags;
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +88,13 @@ class ProfileOptionsSheet extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).pop();
                       onEdit?.call();
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  ManageTagOption(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      onManageTags?.call();
                     },
                   ),
                   const SizedBox(height: 12),
@@ -156,6 +167,23 @@ class DeleteProfileOption extends StatelessWidget {
       iconAsset: 'assets/icon/trash.svg',
       label: 'Hapus Profil',
       color: cs.error,
+      onTap: onTap,
+    );
+  }
+}
+
+class ManageTagOption extends StatelessWidget {
+  const ManageTagOption({super.key, this.onTap});
+
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return _ProfileOptionTile(
+      iconAsset: 'assets/icon/tag_stroke.svg',
+      label: 'Kelola Tag',
+      color: cs.primary,
       onTap: onTap,
     );
   }

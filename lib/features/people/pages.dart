@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:sapa_mobile/features/compose/pages/tag_picker_page.dart';
 import 'package:sapa_mobile/widgets/button/circle_icon_button.dart';
 import 'package:sapa_mobile/widgets/person/person_top_profile.dart';
 import 'package:sapa_mobile/widgets/person/profile_options_sheet.dart';
@@ -60,6 +61,20 @@ final peoplePages = <GetPage>[
                   'phone': '+6281234567890',
                 },
               ),
+              onManageTags: () async {
+                final result = await Get.to<List<String>>(
+                  () => TagPickerPage(
+                    initialSelected: dummyTags,
+                  ),
+                );
+                if (result != null) {
+                  Get.snackbar(
+                    'Tag diperbarui',
+                    result.join(', '),
+                    snackPosition: SnackPosition.BOTTOM,
+                  );
+                }
+              },
             ),
           ),
         ),
@@ -91,7 +106,6 @@ final peoplePages = <GetPage>[
         initialAbout: args['about'] as String?,
         initialEmail: args['email'] as String?,
         initialPhone: args['phone'] as String?,
-        initialTags: args['tags'] as String?,
         initialBirthDate: args['birthDate'] is DateTime
             ? args['birthDate'] as DateTime
             : (args['birthDate'] is String && (args['birthDate'] as String).isNotEmpty)

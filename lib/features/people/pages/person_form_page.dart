@@ -6,6 +6,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:intl/intl.dart';
 import 'package:sapa_mobile/widgets/button/action_button.dart';
 import 'package:sapa_mobile/widgets/form/date_time_picker.dart';
+import 'package:sapa_mobile/widgets/form/multi_value_textfield.dart';
 import 'package:sapa_mobile/widgets/form/text_field.dart';
 import 'package:sapa_mobile/widgets/scaffold/form_scaffold.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
@@ -22,7 +23,6 @@ class PersonFormPage extends StatefulWidget {
     this.initialBirthDate,
     this.initialPhone,
     this.initialEmail,
-    this.initialTags,
   });
 
   final bool isEdit;
@@ -33,10 +33,27 @@ class PersonFormPage extends StatefulWidget {
   final DateTime? initialBirthDate;
   final String? initialPhone;
   final String? initialEmail;
-  final String? initialTags;
 
   @override
   State<PersonFormPage> createState() => _PersonFormPageState();
+}
+
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Text(
+      title,
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: cs.primary,
+            fontWeight: FontWeight.w700,
+          ),
+    );
+  }
 }
 
 class _PersonFormPageState extends State<PersonFormPage> {
@@ -45,10 +62,10 @@ class _PersonFormPageState extends State<PersonFormPage> {
   late final TextEditingController _lastNameCtrl;
   late final TextEditingController _nicknameCtrl;
   late final TextEditingController _aboutCtrl;
-  late final TextEditingController _phoneCtrl;
-  late final TextEditingController _emailCtrl;
-  late final TextEditingController _tagsCtrl;
   DateTime? _birthDate;
+  late List<String> _phoneValues;
+  late List<String> _emailValues;
+  late List<String> _socialLinks;
   Uint8List? _profileImageBytes;
   AssetEntity? _selectedAvatarAsset;
   String? _profileImagePath;
@@ -61,9 +78,9 @@ class _PersonFormPageState extends State<PersonFormPage> {
     _lastNameCtrl = TextEditingController(text: widget.initialLastName ?? '');
     _nicknameCtrl = TextEditingController(text: widget.initialNickname ?? '');
     _aboutCtrl = TextEditingController(text: widget.initialAbout ?? '');
-    _phoneCtrl = TextEditingController(text: widget.initialPhone ?? '');
-    _emailCtrl = TextEditingController(text: widget.initialEmail ?? '');
-    _tagsCtrl = TextEditingController(text: widget.initialTags ?? '');
+    _phoneValues = _initialMultiValues(widget.initialPhone);
+    _emailValues = _initialMultiValues(widget.initialEmail);
+    _socialLinks = [''];
     _birthDate = widget.initialBirthDate;
   }
 
@@ -73,14 +90,25 @@ class _PersonFormPageState extends State<PersonFormPage> {
     _lastNameCtrl.dispose();
     _nicknameCtrl.dispose();
     _aboutCtrl.dispose();
-    _phoneCtrl.dispose();
-    _emailCtrl.dispose();
-    _tagsCtrl.dispose();
     super.dispose();
   }
 
   String _formatDate(DateTime date) {
     return DateFormat('d MMMM yyyy', 'id_ID').format(date);
+  }
+
+  List<String> _initialMultiValues(String? raw) {
+    if (raw == null || raw.trim().isEmpty) return [''];
+    final values = raw
+        .split(',')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+    return values.isEmpty ? [''] : values;
+  }
+
+  List<String> _cleanValues(List<String> values) {
+    return values.map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
   }
 
   Future<void> _pickBirthDate() async {
@@ -108,14 +136,19 @@ class _PersonFormPageState extends State<PersonFormPage> {
       return;
     }
     if (!_formKey.currentState!.validate()) return;
+    final phones = _cleanValues(_phoneValues);
+    final emails = _cleanValues(_emailValues);
+    final socials = _cleanValues(_socialLinks);
     Get.back(result: {
       'firstName': _firstNameCtrl.text.trim(),
       'lastName': _lastNameCtrl.text.trim(),
       'nickname': _nicknameCtrl.text.trim(),
       'about': _aboutCtrl.text.trim(),
-      'phone': _phoneCtrl.text.trim(),
-      'email': _emailCtrl.text.trim(),
-      'tags': _tagsCtrl.text.trim(),
+      'phone': phones.isEmpty ? '' : phones.first,
+      'email': emails.isEmpty ? '' : emails.first,
+      'phones': phones,
+      'emails': emails,
+      'socialLinks': socials,
       'birthDate': _birthDate?.toIso8601String(),
       'photoPath': _profileImagePath,
     });
@@ -184,10 +217,10 @@ class _PersonFormPageState extends State<PersonFormPage> {
         label: widget.isEdit ? 'Simpan' : 'Tambah',
         onPressed: _submit,
         height: 40,
-        radius: 20,
         showShadow: true,
       ),
       scrollable: true,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       body: Form(
         key: _formKey,
         child: Column(
@@ -201,8 +234,8 @@ class _PersonFormPageState extends State<PersonFormPage> {
               ),
             ),
             const SizedBox(height: 24),
-            _SectionLabel(title: 'Informasi Dasar'),
-            const SizedBox(height: 12),
+
+
             AppTextField(
               label: 'Nama Depan',
               controller: _firstNameCtrl,
@@ -247,80 +280,28 @@ class _PersonFormPageState extends State<PersonFormPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
-            _SectionLabel(title: 'Kontak'),
             const SizedBox(height: 12),
-            _buildField(
-              label: 'Nomor Telepon',
-              controller: _phoneCtrl,
-              keyboardType: TextInputType.phone,
+            PhoneMultiField(
+              values: _phoneValues,
+              onChanged: (values) => _phoneValues = values,
             ),
             const SizedBox(height: 12),
-            _buildField(
-              label: 'Email',
-              controller: _emailCtrl,
-              keyboardType: TextInputType.emailAddress,
+            EmailMultiField(
+              values: _emailValues,
+              onChanged: (values) => _emailValues = values,
             ),
-            const SizedBox(height: 24),
-            _SectionLabel(title: 'Detail Lain'),
             const SizedBox(height: 12),
-            _buildField(
-              label: 'Tag (pisahkan dengan koma)',
-              controller: _tagsCtrl,
-              hintText: 'teman, kantor, keluarga',
+            MultiValueTextField(
+              label: 'Link Sosial Media',
+              variant: MultiFieldVariant.tagOrLink,
+              initialValues: _socialLinks,
+              hint: 'https://instagram.com/username',
+              onChanged: (values) => _socialLinks = values,
             ),
             const SizedBox(height: 32),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildField({
-    required String label,
-    required TextEditingController controller,
-    String? Function(String?)? validator,
-    int maxLines = 1,
-    TextInputType? keyboardType,
-    String? hintText,
-  }) {
-    final cs = Theme.of(context).colorScheme;
-    return TextFormField(
-      controller: controller,
-      validator: validator,
-      maxLines: maxLines,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hintText,
-        filled: true,
-        fillColor: cs.surfaceContainerHighest.withAlpha(30),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: cs.primary, width: 1.5),
-        ),
-      ),
-    );
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    return Text(
-      title,
-      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: cs.primary,
-            fontWeight: FontWeight.w700,
-          ),
     );
   }
 }
