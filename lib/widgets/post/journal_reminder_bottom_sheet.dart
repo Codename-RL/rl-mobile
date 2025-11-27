@@ -14,6 +14,9 @@ void showJournalReminderSheet(
   RepeatOption initialRepeat = RepeatOption.none,
   required void Function(DateTime? dateTime, RepeatOption repeat) onSubmit,
   VoidCallback? onDelete,
+  String title = 'Pengingat Jurnal',
+  String description =
+      'Aktifkan notifikasi untuk mengingatkan\nAnda pada jurnal ini',
 }) {
   showModalBottomSheet(
     context: context,
@@ -33,6 +36,8 @@ void showJournalReminderSheet(
           initialRepeat: initialRepeat,
           onSubmit: onSubmit,
           onDelete: onDelete,
+          title: title,
+          description: description,
         ),
       ],
     ),
@@ -46,12 +51,16 @@ class JournalReminderSheet extends StatefulWidget {
     this.initialRepeat = RepeatOption.none,
     required this.onSubmit,
     this.onDelete,
+    required this.title,
+    required this.description,
   });
 
   final DateTime? initialDateTime;
   final RepeatOption initialRepeat;
   final void Function(DateTime? dateTime, RepeatOption repeat) onSubmit;
   final VoidCallback? onDelete;
+  final String title;
+  final String description;
 
   @override
   State<JournalReminderSheet> createState() => _JournalReminderSheetState();
@@ -112,7 +121,7 @@ class _JournalReminderSheetState extends State<JournalReminderSheet> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Pengingat Jurnal',
+                    widget.title,
                     style: tt.headlineSmall?.copyWith(
                       color: cs.primary,
                       fontWeight: FontWeight.w700,
@@ -121,7 +130,7 @@ class _JournalReminderSheetState extends State<JournalReminderSheet> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Aktifkan notifikasi untuk mengingatkan\nAnda pada jurnal ini',
+                    widget.description,
                     style: tt.bodyMedium?.copyWith(
                       color: cs.onSurface.withAlpha(190),
                     ),

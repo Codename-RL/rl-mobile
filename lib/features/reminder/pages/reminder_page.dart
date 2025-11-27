@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sapa_mobile/widgets/form/search_bar.dart';
+import 'package:sapa_mobile/widgets/post/journal_reminder_bottom_sheet.dart';
 import 'package:sapa_mobile/widgets/reminder/reminder_card.dart';
 
 class ReminderPage extends StatefulWidget {
@@ -19,16 +20,19 @@ class _ReminderPageState extends State<ReminderPage> {
       'title': 'Ulang Tahun',
       'name': 'Dwimas Nugraha',
       'time': DateTime.now().add(const Duration(days: 2, hours: 3)),
+      'isJournal': false,
     },
     {
       'title': 'Jurnal Harian',
       'name': 'Aira Lestari',
       'time': DateTime.now().subtract(const Duration(days: 1)),
+      'isJournal': true,
     },
     {
       'title': 'Follow-up Meeting',
       'name': 'Jamal',
       'time': DateTime.now().add(const Duration(days: 7)),
+      'isJournal': false,
     },
   ];
 
@@ -79,8 +83,8 @@ class _ReminderPageState extends State<ReminderPage> {
               title: nearest['title'] as String,
               personName: nearest['name'] as String,
               remindAt: nearest['time'] as DateTime,
-              isJournal: true,
-              journalExcerpt: "Jangan lupa untuk menyiapkan kado...",
+              isJournal: nearest['isJournal'] as bool? ?? false,
+              onTap: () => _showReminderSheet(nearest),
             )
           else
             Padding(
@@ -121,12 +125,32 @@ class _ReminderPageState extends State<ReminderPage> {
                         title: reminder['title'] as String,
                         personName: reminder['name'] as String,
                         remindAt: reminder['time'] as DateTime,
+                        isJournal: reminder['isJournal'] as bool? ?? false,
+                        onTap: () => _showReminderSheet(reminder),
                       );
                     },
                   ),
           ),
         ],
       ),
+    );
+  }
+
+  void _showReminderSheet(Map<String, dynamic> reminder) {
+    final isJournal = reminder['isJournal'] as bool? ?? false;
+    final title = isJournal ? 'Pengingat Jurnal' : 'Pengingat';
+    final description = isJournal
+        ? 'Aktifkan notifikasi untuk mengingatkan\nAnda pada jurnal ini'
+        : 'Aktifkan pengingat untuk tanggal penting ini';
+    showJournalReminderSheet(
+      context,
+      title: title,
+      description: description,
+      initialDateTime: reminder['time'] as DateTime?,
+      onSubmit: (_, __) {},
+      onDelete: () {
+        Get.snackbar('Pengingat dihapus', reminder['title'] as String);
+      },
     );
   }
 }

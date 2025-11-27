@@ -118,7 +118,7 @@ class PostCard extends StatelessWidget {
                         photoUrl: photoUrl,
                         // avatarSize: 32,
                         // composeSize: 46,
-                        // gap: 10,
+                        // gap: 10,-
                       ),
                       const SizedBox(width: 8),
                       if (relationText != null && relationText!.isNotEmpty)

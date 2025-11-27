@@ -70,7 +70,7 @@ class ReminderCard extends StatelessWidget {
                 ),
               ],
             ),
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
