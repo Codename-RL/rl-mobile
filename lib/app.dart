@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'core/app_theme.dart';
 import 'routes/app_pages.dart';
+import 'features/splash/routes.dart';
 
 class SapaApp extends StatelessWidget {
   const SapaApp({super.key});
@@ -15,14 +16,11 @@ class SapaApp extends StatelessWidget {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.light,
-      initialRoute: '/', // TabShell as entry
+      initialRoute: SplashRoutes.page, // start from splash, TabShell after
       getPages: AppPages.pages,
       defaultTransition: Transition.noTransition, // tab tak animasi route
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      supportedLocales: const [
-        Locale('en'),
-        Locale('id', 'ID'),
-      ],
+      supportedLocales: const [Locale('en'), Locale('id', 'ID')],
     );
   }
 }

@@ -6,10 +6,12 @@ import '../features/people/pages.dart';
 import '../features/reminder/pages.dart';
 import '../features/compose/pages.dart';
 import '../features/setting/pages.dart';
+import '../features/splash/pages.dart';
 
 class AppPages {
   static final pages = <GetPage>[
-    ...shellPages,     // '/'
+    ...splashPages,
+    ...shellPages, // '/'
     ...authPages,
     ...journalPages,
     ...peoplePages,
