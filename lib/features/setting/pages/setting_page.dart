@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:sapa_mobile/features/setting/routes.dart';
 import 'package:sapa_mobile/widgets/scaffold/form_scaffold.dart';
 import 'package:sapa_mobile/widgets/setting/setting_profile_header.dart';
 
@@ -18,6 +20,7 @@ class SettingPage extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     return FormScaffold(
       title: 'Pengaturan',
+      titleColor: cs.surface,
       scrollable: true,
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
       hero: SettingProfileHeader(
@@ -25,9 +28,11 @@ class SettingPage extends StatelessWidget {
         email: userEmail,
         photoUrl: photoUrl,
         height: _heroHeight,
-        onEditProfile: () {
-          // TODO: hubungkan ke halaman profil saat tersedia.
-        },
+        onEditProfile:
+            () => Get.toNamed(
+              SettingRoutes.editProfile,
+              arguments: {'name': userName, 'email': userEmail},
+            ),
       ),
       heroHeight: _heroHeight,
       body: Column(
@@ -37,9 +42,7 @@ class SettingPage extends StatelessWidget {
           _SettingMenuButton(
             label: 'Ganti Kata Sandi',
             iconAsset: 'assets/icon/secure.svg',
-            onTap: () {
-              // TODO: arahkan ke alur ganti kata sandi.
-            },
+            onTap: () => Get.toNamed(SettingRoutes.changePassword),
           ),
           const SizedBox(height: 12),
           _SettingMenuButton(
@@ -101,9 +104,7 @@ class _SettingMenuButton extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: tt.titleMedium?.copyWith(
-                  color: baseText,
-                ),
+                style: tt.titleMedium?.copyWith(color: baseText),
               ),
             ),
             if (!isDanger)
@@ -111,7 +112,10 @@ class _SettingMenuButton extends StatelessWidget {
                 'assets/icon/arrow_right.svg',
                 width: 16,
                 height: 16,
-                colorFilter: ColorFilter.mode(cs.primary.withAlpha(100), BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(
+                  cs.primary.withAlpha(100),
+                  BlendMode.srcIn,
+                ),
               ),
           ],
         ),
