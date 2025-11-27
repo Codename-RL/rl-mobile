@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sapa_mobile/features/people/routes.dart';
 import 'package:sapa_mobile/widgets/form/search_bar.dart';
 import 'package:sapa_mobile/widgets/person/empty_people_card.dart';
 import 'package:sapa_mobile/widgets/person/person_filter_sheet.dart';
@@ -107,7 +108,7 @@ class _PeoplePageState extends State<PeoplePage> {
           children: [
             const SizedBox(height: 12),
             EmptyPeopleCard(
-              onAddTap: () => Get.toNamed('/people/create'),
+              onAddTap: () => Get.toNamed(PeopleRoutes.form),
             ),
           ],
         ),
@@ -160,7 +161,9 @@ class _PeoplePageState extends State<PeoplePage> {
                     return PersonListTile(
                       person: person,
                       variant: PersonTileVariant.surface,
-                      onTap: () => Get.toNamed('/people/${person.id}'),
+                      onTap: () => Get.toNamed(
+                        PeopleRoutes.detailPath(person.id),
+                      ),
                     );
                   },
                 ),

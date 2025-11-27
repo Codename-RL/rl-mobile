@@ -10,7 +10,7 @@ import 'package:sapa_mobile/features/shell/tab_controller.dart';
 import 'package:sapa_mobile/widgets/scaffold/main_scaffold.dart';
 
 import '../../widgets/button/circle_icon_button.dart';
-// import '../../features/people/routes.dart'; // kalau mau ke halaman create
+import '../people/routes.dart';
 
 class TabShell extends StatelessWidget {
   const TabShell({super.key});
@@ -34,10 +34,7 @@ class TabShell extends StatelessWidget {
           variant: CircleBtnVariant.stroke, // sesuai style-mu
           size: 36,
           iconSize: 18,
-          onTap: () {
-            // contoh: ke halaman tambah orang (opsional)
-            // Get.toNamed(PeopleRoutes.create); // atau buka bottom sheet, dll.
-          },
+          onTap: () => Get.toNamed(PeopleRoutes.form),
         );
       }
 

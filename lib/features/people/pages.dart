@@ -10,6 +10,7 @@ import 'package:sapa_mobile/widgets/scaffold/profile_scaffold.dart';
 import 'routes.dart';
 import 'pages/people_page.dart';
 import 'pages/person_detail_page.dart';
+import 'pages/person_form_page.dart';
 
 final peoplePages = <GetPage>[
   GetPage(
@@ -44,7 +45,22 @@ final peoplePages = <GetPage>[
             variant: CircleBtnVariant.filled,
             size: 40,
             iconSize: 20,
-            onTap: () => showProfileOptionsSheet(context),
+            onTap: () => showProfileOptionsSheet(
+              context,
+              onEdit: () => Get.toNamed(
+                PeopleRoutes.form,
+                arguments: {
+                  'isEdit': true,
+                  'firstName': dummyName.split(' ').first,
+                  'lastName': dummyName.split(' ').last,
+                  'nickname': dummyName.split(' ').first,
+                  'about':
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                  'email': 'dwimas@example.com',
+                  'phone': '+6281234567890',
+                },
+              ),
+            ),
           ),
         ),
         hero: hero,
@@ -59,6 +75,28 @@ final peoplePages = <GetPage>[
         scrollable: false,
         // ⬇️ kalau di ProfileScaffold ada parameter heroHeight, isi ini:
         // heroHeight: PersonTopProfile.estimateHeight(dummyTags),
+      );
+    },
+  ),
+  GetPage(
+    name: PeopleRoutes.form,
+    transition: Transition.cupertino,
+    page: () {
+      final args = Get.arguments as Map<String, dynamic>? ?? {};
+      return PersonFormPage(
+        isEdit: args['isEdit'] == true,
+        initialFirstName: args['firstName'] as String?,
+        initialLastName: args['lastName'] as String?,
+        initialNickname: args['nickname'] as String?,
+        initialAbout: args['about'] as String?,
+        initialEmail: args['email'] as String?,
+        initialPhone: args['phone'] as String?,
+        initialTags: args['tags'] as String?,
+        initialBirthDate: args['birthDate'] is DateTime
+            ? args['birthDate'] as DateTime
+            : (args['birthDate'] is String && (args['birthDate'] as String).isNotEmpty)
+                ? DateTime.tryParse(args['birthDate'] as String)
+                : null,
       );
     },
   ),
